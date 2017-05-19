@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Process Flow</title>
+<meta name="description" content="A simple process flow or SCADA diagram editor, simulating equipment monitoring and control." />
+<!-- Copyright 1998-2017 by Northwoods Software Corporation. -->
+<meta charset="UTF-8">
+<script src="go.js"></script>
+
+<link href="http://getbootstrap.com/2.3.2/assets/css/bootstrap.css" rel="stylesheet" />
+<link href="http://getbootstrap.com/2.3.2/assets/js/google-code-prettify/prettify.css" rel="stylesheet" />
+<link href="http://getbootstrap.com/2.3.2/assets/css/bootstrap-responsive.css" rel="stylesheet" />
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+<script
+  src="https://code.jquery.com/jquery-3.2.0.js"
+  integrity="sha256-wPFJNIFlVY49B+CuAIrDr932XSb6Jk3J1M22M3E2ylQ="
+  crossorigin="anonymous"></script> 
+
+  
+  
+ <style>
+ 
+ div#scada-show > a {
+    color: blue;
+    text-decoration: blink;
+    margin-left: 2.5px;
+}
+ 
+ 
+ </style>
+
+
+</head>
+
+
+<body>
+
+
+<div class="row">
+		<div class="col-md-12">
+				<div id="controls" style="border: solid 1px black; width:100%; height:85px"></div>
+		</div>
+</div>
+
+
+
+
+<div id="sample">
+
+
+
+	
+
+	<div id="frame" style="border: solid 1px black; width:100%; height:500px"></div>
+	<div style="display:none;" id='scada-show'>
+			<a id="scada-show-more" class="" href="javascript:void(0);" >
+				<i  style="cursor:pointer;" class="fa fa-plus" aria-hidden="true">
+				</i>
+			</a>
+			<a  id="scada-delete-node" class="" href="javascript:void(0);" >
+				<i  style="cursor:pointer;" class="fa fa-trash" aria-hidden="true">
+				</i>
+			</a>
+	</div>
+
+
+	<div>
+			<button id="save_scada" type="button"  >Guardar</button>
+	</div>
+	
+	
+	<div class="text-center">
+            <button class="demo btn btn-primary btn-large" data-toggle="modal" href="#scada-modal">View Demo</button>
+     </div>
+	
+
+<div id="scada-modal" class="modal hide fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+  <div class="modal-header">
+		<h4 class="modal-title">...</h4>
+  </div>
+  <div class="modal-body">
+    
+  </div>
+  <div class="modal-footer">
+    <button type="button" data-dismiss="modal" class="btn">Cancelar</button>
+    <button type="button" data-dismiss="modal" class="btn btn-primary">Guardar</button>
+  </div>
+</div>
+
+	
+<div id="scada-modal-delete" class="modal hide fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+  <div class="modal-header">
+		<h4 class="modal-title">Eliminar Objeto </h4>
+  </div>
+  <div class="modal-body">
+      <p>¿Seguro que desea eliminar {object} ?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" data-dismiss="modal" class="btn">Cancelar</button>
+    <button id="delete-action-scada" type="button" data-dismiss="modal" class="btn btn-primary">Eliminar</button>
+  </div>
+</div>
+
+	
+
+ 
+</div>
+	
+	 <script type="text/javascript" src="http://getbootstrap.com/2.3.2/assets/js/google-code-prettify/prettify.js"></script>
+   <script src="http://getbootstrap.com/2.3.2/assets/js/bootstrap.js"></script>
+
+<script>
+
+	var $temp = null;
+
+	class ScadaError {
+	
+			ObjectError(name , type ){
+				  console.log("ERROR -> " + name  + " T ->" + type );
+			}
+	
+	}
+
+
+	class ScadaTools extends ScadaError  {
+	
+		constructor(){
+			super();
+			this.canvasId 		= "frame";
+			this.canvasData     = {};
+			this.$$ 			= go.GraphObject.make;
+			this.canvas 		= null;
+			this.controlId		= "controls";
+			this.control 		= null ;
+			this.saveBtn		= "#save_scada";
+			this.imgLocation    = "images/{pattern}.png";
+			this.modelData		= null;
+			this.controlData    = null ;
+			
+		}
+		
+		init(){
+		
+			//creamos el puntero de go
+			
+			
+			//configuraciones iniciales para el frame tambien llamado canvas 
+			this.canvas 		= this.$$(go.Diagram, this.canvasId,
+									{
+										  grid: this.$$(go.Panel, "Grid",
+												this.$$(go.Shape, "LineH", { stroke: "lightgray", strokeWidth: 0.5 }),
+												this.$$(go.Shape, "LineH", { stroke: "gray", strokeWidth: 0.5, interval: 10 }),
+												this.$$(go.Shape, "LineV", { stroke: "lightgray", strokeWidth: 0.5 }),
+												this.$$(go.Shape, "LineV", { stroke: "gray", strokeWidth: 0.5, interval: 10 })
+											),
+											allowDrop: true, 
+											"draggingTool.dragsLink": true,
+											"draggingTool.isGridSnapEnabled": true,
+											"linkingTool.isUnconnectedLinkValid": true,
+											"linkingTool.portGravity": 20,
+											"relinkingTool.isUnconnectedLinkValid": true,
+											"relinkingTool.portGravity": 20,
+											"relinkingTool.fromHandleArchetype":
+											this.$$(
+													go.Shape, 
+													"Diamond", { 
+																segmentIndex: 0, 
+																cursor: "pointer", 
+																desiredSize: new go.Size(8, 8), 
+																fill: "tomato",
+																stroke: "darkred" 
+													}),
+											"relinkingTool.toHandleArchetype":
+											this.$$(go.Shape, "Diamond", { segmentIndex: -1, cursor: "pointer", desiredSize: new go.Size(8, 8), fill: "darkred", stroke: "tomato" }),
+											"linkReshapingTool.handleArchetype":
+											this.$$(go.Shape, "Diamond", { desiredSize: new go.Size(7, 7), fill: "lightblue", stroke: "deepskyblue" }),
+											//rotatingTool: $(this.TopRotatingTool), 
+										   "rotatingTool.snapAngleMultiple": 15,
+										   "rotatingTool.snapAngleEpsilon": 15,
+										   "undoManager.isEnabled": true
+									});
+									
+			
+				
+			this.nodeSelectionAdornmentTemplate =
+				this.$$(go.Adornment, "Auto",
+					this.$$(go.Shape, { fill: null, stroke: "deepskyblue", strokeWidth: 1.5, strokeDashArray: [4, 2] }),
+					this.$$(go.Placeholder)
+				);
+			
+			this.nodeResizeAdornmentTemplate =
+				this.$$(go.Adornment, "Spot",
+				{ locationSpot: go.Spot.Right },
+				this.$$(go.Placeholder),
+				this.$$(go.Shape, { alignment: go.Spot.TopLeft, cursor: "nw-resize", desiredSize: new go.Size(6, 6), fill: "lightblue", stroke: "deepskyblue" }),
+				this.$$(go.Shape, { alignment: go.Spot.Top, cursor: "n-resize", desiredSize: new go.Size(6, 6), fill: "lightblue", stroke: "deepskyblue" }),
+				this.$$(go.Shape, { alignment: go.Spot.TopRight, cursor: "ne-resize", desiredSize: new go.Size(6, 6), fill: "lightblue", stroke: "deepskyblue" }),
+	
+				this.$$(go.Shape, { alignment: go.Spot.Left, cursor: "w-resize", desiredSize: new go.Size(6, 6), fill: "lightblue", stroke: "deepskyblue" }),
+				this.$$(go.Shape, { alignment: go.Spot.Right, cursor: "e-resize", desiredSize: new go.Size(6, 6), fill: "lightblue", stroke: "deepskyblue" }),
+
+				this.$$(go.Shape, { alignment: go.Spot.BottomLeft, cursor: "se-resize", desiredSize: new go.Size(6, 6), fill: "lightblue", stroke: "deepskyblue" }),
+				this.$$(go.Shape, { alignment: go.Spot.Bottom, cursor: "s-resize", desiredSize: new go.Size(6, 6), fill: "lightblue", stroke: "deepskyblue" }),
+				this.$$(go.Shape, { alignment: go.Spot.BottomRight, cursor: "sw-resize", desiredSize: new go.Size(6, 6), fill: "lightblue", stroke: "deepskyblue" })
+			);
+			
+			this.nodeRotateAdornmentTemplate =
+			this.$$(go.Adornment,
+				{ locationSpot: go.Spot.Center, locationObjectName: "CIRCLE" },
+				this.$$(go.Shape, "Circle", { name: "CIRCLE", cursor: "pointer", desiredSize: new go.Size(7, 7), fill: "lightblue", stroke: "deepskyblue" }),
+				this.$$(go.Shape, { geometryString: "M3.5 7 L3.5 30", isGeometryPositioned: true, stroke: "deepskyblue", strokeWidth: 1.5, strokeDashArray: [4, 2] })
+			);
+			
+			
+			/**
+				Creando las plantillas para los objetos SCADA 
+			***/
+			
+			this._TemplateMap  = new go.Map("string", go.Node);
+			this._TemplateMap.add("SCADA_A", this._FigureTemplate());
+			this._TemplateMap.add("SCADA_B", this._ImageTemplate());
+			this.canvas.nodeTemplateMap = this._TemplateMap;
+
+			
+	
+			this._linkTemplate();  //carga las plantillas 
+			this._load(); 		   //carga multiple  
+			this._loop();		  //cargar loops 
+			this._controlBar();   //cargar el area de controladores 
+			this._documentChange(); //carga la funcion change del documento 
+			
+    }
+	
+	_ImageTemplate(){
+	
+		var $this = this;
+		return this.$$(go.Node, "Spot",
+						{ 
+							locationSpot: go.Spot.Center 
+						},
+						new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
+						{ selectable: true, selectionAdornmentTemplate: this.nodeSelectionAdornmentTemplate },
+						{ resizable: true, resizeObjectName: "PANEL", resizeAdornmentTemplate: this.nodeResizeAdornmentTemplate },
+						{ rotatable: true, rotateAdornmentTemplate: this.nodeRotateAdornmentTemplate },
+						new go.Binding("angle").makeTwoWay(),
+						this.$$(go.Panel, "Auto",
+						{ 
+							name: "PANEL" 
+						},
+						new go.Binding("desiredSize", 
+								"size",
+								go.Size.parse
+						).makeTwoWay(go.Size.stringify),
+						this.$$(go.TextBlock, 
+								new go.Binding("text", "key")
+						),
+						this.$$(go.Picture, 
+							{ 
+								desiredSize: new go.Size(75, 50) 
+							},
+							new go.Binding("source", "src", 
+							function(s) 
+							{ 
+								return String($this.imgLocation)
+											.replace("{pattern}" , s).toString() ; 
+							}
+						))
+					),
+						this._makePort("T", go.Spot.Top, false, true  ),
+						this._makePort("L", go.Spot.Left, true, true),
+						this._makePort("R", go.Spot.Right, true, true),
+						this._makePort("B", go.Spot.Bottom, true, false),
+						{ 
+							mouseEnter: function(e, node ) { scada.showSmallPorts(node, true ); },
+							mouseLeave: function(e, node ) { scada.showSmallPorts(node, false ); },
+							click : function(e,node) {
+								 //ejecuta la accion del control o nodo 
+								 //scada._nodeClick(e,node);
+							}
+						}
+			);
+	
+	}
+	
+	
+	_FigureTemplate (){
+			return this.$$(go.Node, "Spot",
+						{ 
+							locationSpot: go.Spot.Center 
+						},
+								new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
+								{ 
+									selectable: true, 
+									selectionAdornmentTemplate: this.nodeSelectionAdornmentTemplate 
+								},
+								{ 
+									resizable: true, 
+									resizeObjectName: "PANEL",
+									resizeAdornmentTemplate: this.nodeResizeAdornmentTemplate 
+								},
+								{ 
+									rotatable: true, 
+									rotateAdornmentTemplate: this.nodeRotateAdornmentTemplate 
+								},
+						new go.Binding("angle").makeTwoWay(),
+						this.$$(go.Panel, "Auto",
+						{ 
+							name: "PANEL" 
+						},
+						new go.Binding("desiredSize", "size", go.Size.parse)
+													.makeTwoWay(go.Size.stringify),
+						this.$$(go.Shape, "Rectangle", 
+						{
+								portId: "", 
+								fromLinkable: true, 
+								toLinkable: true, 
+								cursor: "pointer",
+								fill: "white",  
+								strokeWidth: 2,
+							},
+							new go.Binding("figure"),
+							new go.Binding("fill")
+						),
+						this.$$(go.TextBlock,
+							{
+								font: "bold 11pt Helvetica, Arial, sans-serif",
+								margin: 8,
+								maxSize: new go.Size(160, NaN),
+								wrap: go.TextBlock.WrapFit,
+								editable: true
+						},
+						new go.Binding("text").makeTwoWay())
+					),
+						this._makePort("T", go.Spot.Top, false, true  ),
+						this._makePort("L", go.Spot.Left, true, true),
+						this._makePort("R", go.Spot.Right, true, true),
+						this._makePort("B", go.Spot.Bottom, true, false),
+						{ 
+							mouseEnter: function(e, node ) { scada.showSmallPorts(node, true ); },
+							mouseLeave: function(e, node ) { scada.showSmallPorts(node, false ); },
+							click : function(e,node) {
+								 //ejecuta la accion del control o nodo 
+								// scada._nodeClick(e,node);
+							}
+						}
+			);
+	
+	}
+	
+	
+	_makePort(name, spot, output, input  ) {
+			return this.$$(go.Shape, "Circle",
+               {
+                  fill: null,  
+                  stroke: null,
+                  desiredSize: new go.Size(7, 7),
+                  alignment: spot, 
+                  alignmentFocus: spot, 
+                  portId: name,  
+                  fromSpot: spot, toSpot: spot,  
+                  fromLinkable: output, toLinkable: input,  
+                  cursor: "pointer" 
+               });
+	}
+	
+
+	_documentChange($this = this){
+	
+		this.canvas.addDiagramListener("Modified", function(e) {
+
+			/***
+				cuando se modifica el canvas
+			****/
+		
+			let button =	$(scada.saveBtn);
+			var idx = document.title.indexOf("*");
+			
+			if($this.canvas.isModified){
+				button.prop("disabled" , false)
+				if(idx < 0) document.title += "*";
+				else document.title = document.title.substr(0, idx);
+			}
+			else {
+				button.prop("disabled" , true)
+			}
+			
+			
+		});
+		
+		
+		this.canvas.addDiagramListener("ExternalObjectsDropped" , function(e ){
+		
+				/***
+					Cuando se agrega un objeto externo al canvas 
+					
+					al momento de crear el objeto al canvas debe de considerarse 
+					un par de cosas , por ejemplo el ID del objeto
+				***/
+				
+				//CANVAS 
+				let c = $this.canvas;
+				
+				//SKIPS 
+				let o = c.skipsUndoManager;
+				
+				
+				/**SOLUCION PARA EL SISTEMA DE LINEAS DEL OBJETO **/
+				c.links.each(function(l){
+				
+					 if(l.part.data.sid == null || typeof l.part.data.sid == 'undefined' ){
+						l.part.data.sid = $this._CreateOID(l.part.data.type); //CREAMOS UN ID EN LAS LINES 
+					 }
+
+					 l.click = function(e,node){
+							console.log(node.part.data);
+							//let i = $this._CreateOID(node.part.data.type);
+							//$this._createModal($this._modalParams(node.part.data));
+					 };
+					 
+				});
+				/***FIN DE LA SOLUCION DE LINEAS DE CANVAS ***/
+				
+				
+				/***INICIO PARA LOS DEMAS NODOS ***/
+				
+				c.nodes.each(function(l){
+				
+						if(l.part.data.sid == null || typeof l.part.data.sid == 'undefined' ){
+							l.part.data.sid = $this._CreateOID(l.part.data.type , l.part.data.category ); //CREAMOS UN ID EN LAS LINES 
+						}
+						
+						l.click = function(e,node){
+							console.log(node.part.data);
+							console.log(node.part.position);
+							console.log($("#scada-show").find("button"));
+							
+							//$("#scada-show").find("button").position.top = node.part.position.y;
+							
+							//let i = $this._CreateOID(node.part.data.type);
+							//$this._createModal($this._modalParams(node.part.data));
+						};
+						
+						l.contextClick = function(e, node ){ 
+							$this._createModal($this._modalParams(node.part.data));
+						};
+						
+						
+						//evento mouseover 
+						l.mouseOver = function(e,node){
+		
+							$("#scada-show").css({
+								left 		:  node.part.position.x + 50 ,
+								top  		:  (node.part.position.y  -  $("#frame").height()) - 25 ,
+								position 	: "relative",
+								'z-index'   : '100000000',
+								display 	: 'inline',
+								opacity     : 0.75
+							});
+							
+							
+							//accion scada ver parametros 
+							$("#scada-show").find("a[id='scada-show-more']").click(function(){
+							
+								$this._createModal($this._modalParams(node.part.data));
+								
+								$("#scada-show").css({
+									display : 'none'
+								});
+								
+							});
+							
+							//accion eliminar el objeto scada
+							$("#scada-show").find("a[id='scada-delete-node']").click(function(){
+							
+								$this._deleteModal(node)
+							
+								$("#scada-show").css({
+									display : 'none'
+								});
+								
+							});
+							
+						};
+						
+						
+						l.mouseLeave = function(e,node){
+							/*$("#scada-show").css({
+								display 	: 'none'
+							});*/
+						}
+				
+				});
+				
+				/**FINALIZACION NODAL **/
+				
+				//e.parameter.click = function(){ console.log("hello");}
+				//console.log(c.skipsUndoManager);
+		});
+	
+	}
+	
+	
+	_CreateOID(type = '' , cat = '' , max = 10 , iteration = 0  , r = '' ){
+	
+		//por medio de esta funcion recursiva podremos crear un ID unico por objeto 
+	
+		if(max > iteration){
+			 return  this._CreateOID(type , cat , max , (iteration+1) , (r + String(Math.floor(Math.random() * 10))));
+		}
+		else {
+		
+			let l = String(type).substr(0 , 1 );
+			
+			if(l == null || l == '' || typeof l == 'undefined' )
+				if(cat === 'SCADA_A')
+					l = "s";
+				else 
+					l = "iq";
+				
+			return  (l  + "_" + r);
+		}
+
+	}
+	
+	
+	_modalParams( data = null  ){
+	
+		   let _p = {
+		   
+				text 		: data.text ? data.text : null ,
+				name 		: data.name ? data.name : '' ,
+				figure 		: data.figure ? data.figure : null ,
+				func 		: data.func ? data.func : null ,
+				id  		: data.sid ? data.sid : null ,
+				type 		: data.type ? data.type : null ,
+				state 		: data.state ? data.state : null 
+		   };
+		   
+		   console.log("Console : -> modalParams : \n {Start} ");
+		   console.log(_p);
+		   console.log("{End}");
+		   
+		   return _p;
+			
+	}
+	
+	_deleteModal(node){
+		 
+		 let s = $("#scada-modal-delete");
+		 let r = s.find(".modal-body").find("p");
+		 let p = node.part.data;
+		 let i = '';
+		 
+		 if(p.name == '' || p.name == null  || typeof p.name == 'undefined')
+			  i = p.text ;
+	     else 
+			 i = p.name;
+			 
+		 let k = '¿Seguro que desea eliminar ' +  i + ' ?';
+		 
+		 $temp = node.part;
+		 $("#delete-action-scada").attr("onclick" , "scada._delAction();");
+		 
+		
+		 r.text(k)
+		 s.modal();
+		 
+	}
+	
+	
+	_delAction(part = $temp){
+		this.canvas.remove(part);
+	}
+	
+	_createModal( $params = null ){
+	     
+		 let s = $("#scada-modal");
+		 
+		 s.find(".modal-header")
+		  .find(".modal-title")
+		  .text($params.name);
+		
+		 s.modal();
+	}
+	
+	
+	_nodeClick(e, node ){
+	
+		this._createModal(this._modalParams(node.part.data));
+	    //nodo en modo onclick 
+		/*var n = node.part ;
+		 var diagram = n.diagram;
+		console.log(diagram); 
+		console.log(diagram.model.getCategoryForNodeData(n.data)); //obtenemos la categoria 
+		console.log(n.data); //obtenemos la data del nodo 
+		n.data.text = "tanquesito";*/
+	
+	}
+	
+	_loop(){
+	
+		var diagram = this.canvas;
+		var $this = this;
+		
+		setTimeout(function() {
+		
+		
+				var oldskips = diagram.skipsUndoManager;
+				diagram.skipsUndoManager = true;
+				
+				diagram.links.each(function(link) {
+					var d = link.part.data;
+					/*if(!d.state.active )
+							console.log("no activa");*/
+							
+					var shape = link.findObject("PIPE");
+					var off  = 0;
+				try{
+					off = shape.strokeDashOffset - 2;
+					shape.strokeDashOffset = (off <= 0) ? 20 : off;
+				}
+				catch(e){ }
+			});
+			
+			
+			diagram.skipsUndoManager = oldskips;
+		    $this._loop();
+		}, 200);
+	
+	}
+	
+	
+	
+	_controlBarConf(){
+	
+		 this.control =  this.$$(go.Palette, this.controlId ,  
+		  {
+				maxSelectionCount: 1, 
+				nodeTemplateMap: this.canvas.nodeTemplateMap,
+				groupTemplate: this.canvas.groupTemplate,
+				layout: this.$$(go.GridLayout),
+				linkTemplate: 
+				this.$$(go.Link,
+				{
+						locationSpot: go.Spot.Center,
+						selectionAdornmentTemplate:
+						this.$$(go.Adornment, "Link",
+								{ 
+										locationSpot: go.Spot.Center 
+								},
+						this.$$(go.Shape,
+							{ 
+								isPanelMain: true, 
+								fill: null, 
+								stroke: "blue", 
+								strokeWidth: 0 
+								
+							}),
+                    this.$$(go.Shape,  
+                      { 
+							toArrow: "Standard", 
+							stroke: null 
+					   })
+                  )
+              },
+              {
+                routing: go.Link.AvoidsNodes,
+                curve: go.Link.JumpOver,
+                corner: 5,
+                toShortLength: 4 //,
+				//click : function(a,b){ console.log("funcion");}
+              },
+              new go.Binding("points"),
+              this.$$(go.Shape,  
+                { 
+						isPanelMain: true, 
+						strokeWidth: 3 
+				}),
+              this.$$(go.Shape, 
+                { 
+						toArrow: "Standard",
+						stroke: null 
+				})
+            )
+        });
+		  
+	
+	
+	}
+	
+	
+	_controlBar(){
+	
+		 this._controlBarConf();
+		  
+		 //creamos las lineas 
+		 var line = [
+				{
+						points: new go.List(go.Point).addAll(
+													[	new go.Point(0, 0), 
+														new go.Point(30, 0), 
+														new go.Point(30, 40), 
+														new go.Point(60, 40)
+													]),
+						type : "line",
+						state : {
+							  active : true 
+						},
+						func : null , 
+						sid  : null 
+					
+				}
+          ];
+		  
+
+		  if(this.controlData === null ){
+					this.ObjectError("Error al momento de cargar los items u objetos" , "Load error ");
+					return;
+		  }
+				
+				
+		 this.control.model = new go.GraphLinksModel(
+			this.controlData,
+			line 
+		 );
+		
+
+		
+	}
+	
+
+	
+	_load() {
+			this.canvas.model = go.Model.fromJson(this.canvasData);
+			this.loadDiagramProperties();
+	}
+	
+	
+	loadDiagramProperties(e) {
+		var pos = this.canvas.model.modelData.position;
+		if (pos) this.canvas.initialPosition = go.Point.parse(pos);
+    }
+	
+
+	_linkTemplate(){
+	
+	 this.linkSelectionAdornmentTemplate =
+				this.$$(go.Adornment, "Link",
+				this.$$(go.Shape,
+				{ 
+						isPanelMain: true, 
+						fill: null, 
+						stroke: "deepskyblue", 
+						strokeWidth: 0 
+				})
+	 );
+
+	  this.canvas.linkTemplate =
+      this.$$(go.Link,
+		{ selectable: true, selectionAdornmentTemplate: this.linkSelectionAdornmentTemplate },
+        { relinkableFrom: true, relinkableTo: true, reshapable: true },
+        { 
+				routing: go.Link.AvoidsNodes, 
+				curve: go.Link.JumpGap, 
+				corner: 10, 
+				reshapable: true, 
+				toShortLength: 7 
+		},
+        new go.Binding("points").makeTwoWay(),
+        this.$$(go.Shape, { isPanelMain: true, stroke: "black", strokeWidth: 5 }),
+        this.$$(go.Shape, { isPanelMain: true, stroke: "gray", strokeWidth: 3 }),
+        this.$$(go.Shape, { isPanelMain: true, stroke: "white", strokeWidth: 1, name: "PIPE", strokeDashArray: [10, 10] }),
+        this.$$(go.Shape, { toArrow: "Triangle", fill: "black", stroke: null })
+      );
+	
+	
+	}
+		
+		
+	TopRotatingTool() {
+			return go.RotatingTool.call(this);
+	}
+	
+	
+	showSmallPorts(node, show) {
+      node.ports.each(function(port) {
+        if (port.portId !== "") { 
+          port.fill = show ? "rgba(0,0,0,.3)" : null;
+        }
+      });
+    }
+		
+
+	
+}
+
+
+
+class Scada extends ScadaTools {
+	
+	    constructor(){
+			super();
+		}
+		
+	
+		Create(){
+			this.init();
+			this.events();
+		}
+		
+		setConfLocale(cnf = null ){
+		
+			if( cnf == null)  {
+					
+					this.canvasId 		= "frame";
+					this.controlId		= "controls";
+					this.saveBtn		= "#save_scada";
+					this.imgLocation    = "images/{pattern}.png";
+			}
+			
+			if(typeof Cnf !== 'object' ) return null;
+			
+			if( cnf.canvas !== 'undefined' 
+					|| cnf.canvas !== null 
+					|| cnf.canvas !== '')
+						this.canvasId = cnf.canvas;
+			
+			if( cnf.control !== 'undefined' 
+					|| cnf.control !== null 
+					|| cnf.control !== '')
+						this.controlId = cnf.control;
+			
+			if( cnf.savebtn !== 'undefined' 
+					|| cnf.savebtn !== null 
+					|| cnf.savebtn !== '')
+						this.saveBtn = cnf.savebtn;
+						
+			if( cnf.img_location !== 'undefined' 
+					|| cnf.img_location!== null 
+					|| cnf.img_location !== '')
+						this.imgLocation = cnf.img_location;
+		
+		}
+		
+		
+		events($this = this ){
+					
+			
+			//evento click boton para guardar la data 
+			$($this.saveBtn).click(function(){
+				$this.modelData = $this.canvas.model.toJson()
+				console.log($this.modelData);
+			});
+			
+		}
+
+		 
+		addData(data ){
+		   this.canvasData = data;
+		}
+		
+		
+		setControls (controls = null) {
+			this.controlData = controls;
+		}
+
+	
+	}
+
+	
+	var scada = new Scada();
+
+
+   $(document).ready(function(){
+		//console.log("iniciando...");
+		
+		
+		//scada.addData(data);
+		
+		scada.setConfLocale({
+		
+			canvas      	: "frame",
+			control     	: "controls",
+			savebtn     	: "#save_scada",
+			img_location 	: "images/{pattern}.png"
+			
+		})
+		
+		let items = [
+		     {
+					text: "Tanque",
+					name : "Tank",
+					figure: "Cylinder1", 
+					fill:  scada.$$(go.Brush, "Linear",
+									{ 
+										start: go.Spot.Left, 
+										end: go.Spot.Right,
+									    0: "gray", 
+										0.5: "white", 
+										1: "gray" 
+									}
+							),
+					minSize				: new go.Size(50, 50),
+					fromSpot			: go.Spot.AllSides, 
+					toSpot				: go.Spot.AllSides,
+					desiredSize 		: new go.Size(35, 35),
+					category 			: 'SCADA_A',
+					sid 				: null, 
+					state 				: { active : true } ,
+					func 				: {}
+			 },
+			 {
+				name 		: "GATO",
+				key 		: "gato",
+				src 		: "50x40",
+				state 		: {
+						active : true 
+				},
+				sid 		: null ,
+				func 		: null ,
+				category 	: "SCADA_B",
+				text 		: ''
+			 }
+		];
+		
+		scada.setControls(items);
+		scada.Create();
+		
+		
+   });
+   
+   
+   /***
+    { 		text: "Tanque",
+					name : "Tank",
+					figure: "Cylinder1", 
+					fill:  this.$$(go.Brush, "Linear",
+									{ 
+										start: go.Spot.Left, 
+										end: go.Spot.Right,
+									    0: "gray", 
+										0.5: "white", 
+										1: "gray" 
+									}
+							),
+					minSize: new go.Size(50, 50),
+					fromSpot: go.Spot.AllSides, 
+					toSpot: go.Spot.AllSides,
+					desiredSize : new go.Size(35, 35),
+					category : 'SCADA_A'
+			},
+			{
+			    key 		: "citi",
+				src 		: "50x40",
+				category 	: "SCADA_B"
+			 }
+   
+   
+   ***/
+
+
+</script>
+</body>
+</html>
