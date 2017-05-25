@@ -8,9 +8,13 @@
 <meta charset="UTF-8">
 <script src="go.js"></script>
 
-<link href="http://getbootstrap.com/2.3.2/assets/css/bootstrap.css" rel="stylesheet" />
-<link href="http://getbootstrap.com/2.3.2/assets/js/google-code-prettify/prettify.css" rel="stylesheet" />
-<link href="http://getbootstrap.com/2.3.2/assets/css/bootstrap-responsive.css" rel="stylesheet" />
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 
 <script
@@ -18,7 +22,7 @@
   integrity="sha256-wPFJNIFlVY49B+CuAIrDr932XSb6Jk3J1M22M3E2ylQ="
   crossorigin="anonymous"></script> 
 
-  
+  <script src="GuideLines.js"></script>
   
  <style>
  
@@ -27,6 +31,173 @@
     text-decoration: blink;
     margin-left: 2.5px;
 }
+
+
+
+<style type="text/css">
+#menuBar {
+  border: none;
+  border: 0px;
+  margin: 0px;
+  padding: 0px;
+  font: 67.5% 'Lucida Sans Unicode', 'Bitstream Vera Sans', 'Trebuchet Unicode MS', 'Lucida Grande', Verdana, Helvetica, sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  width: auto;
+}
+#menuBar ul {
+  background: #ededed;
+  height: 25px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+#menuBar li {
+  float: left;
+  padding: 0px;
+}
+#menuBar li a {
+  background: #ededed;
+  display: block;
+  font-weight: normal;
+  line-height: 25px;
+  margin: 0px;
+  padding: 0px 5px;
+  text-align: center;
+  text-decoration: none;
+}
+#menuBar > ul > li > a {
+  color: black;
+}
+#menuBar ul ul a {
+  color: black;
+}
+#menuBar li > a:hover,
+#menuBar ul li:hover > a {
+  background: #007FFF;
+  color: white;
+  text-decoration: none;
+}
+#menuBar li ul {
+  background: #9CCB19;
+  display: none;
+  height: auto;
+  padding: 0px;
+  margin: 0px;
+  border: 0px;
+  position: absolute;
+  width: 150px;
+  z-index: 200;
+}
+#menuBar li:hover ul {
+  display: block;
+}
+#menuBar li li {
+  background: #ededed;
+  display: block;
+  float: none;
+  margin: 0px;
+  padding: 0px;
+  width: 150px;
+}
+#menuBar li:hover li a {
+  background: none;
+}
+#menuBar li ul a {
+  display: block;
+  height: 25px;
+  font-size: 12px;
+  font-style: normal;
+  margin: 0px;
+  padding: 0px 10px 0px 15px;
+  text-align: left;
+}
+#menuBar li ul a:hover,
+#menuBar li ul li:hover > a {
+  background: #007FFF;
+  border: 0px;
+  color: white;
+  text-decoration: none;
+}
+/*sub-sublist*/
+#nav li:hover ul ul {
+	display: none;
+}
+#nav li li:hover ul {
+	background:#9CCB19;
+	margin-left: 150px;
+	margin-top: -25px;
+	display: block;
+}
+/*sub-sub-sublist*/
+#nav li li:hover ul ul {
+	display: none;
+}
+#nav li li li:hover ul {
+	background:#9CCB19;
+	margin-left: 150px;
+	margin-top: -25px;
+	display: block;
+	color: #0276FD;
+}
+	input {
+		text-align: center;
+		font-size: large;
+		float: left;
+	}
+	#myOverviewDiv {
+		background-color: lightgray;
+	}
+	#currentFile {
+		background: #1874CD;
+		width:100%;
+		text-align:center;
+		font-family:Arial;
+		font-weight:bold;
+		font-size:14px;
+		padding:3px 0px;
+		color: white;
+	}
+	.draggable {
+		display: inline-block;
+		vertical-align: top;
+		border: 1px solid gray;
+		background-color: #e2e2e2;
+
+		position: absolute;
+		top:40%;
+		left:50%;
+		width:300px;
+		height: 200px;
+		z-index: 500;
+	}
+	.handle {
+		    background-color: darkblue;
+			color: white;
+		text-align: center;
+		font: bold 12px sans-serif;
+	}
+	.elementText {
+		font-family:Arial;
+		font-size:medium;
+		margin-left: 10px;
+		margin-top: 20px;
+		margin-bottom:10px;
+	}
+	.mySavedFiles {
+		font-family:Arial;
+		font-size:medium;
+		width:250px;
+		margin-left: 25px;
+	}
+	.elementBtn {
+		margin-top:20px;
+		font-family:Arial;
+		font-size:medium;
+		margin-left:20px;
+	}
+</style>
+
  
  
  </style>
@@ -37,24 +208,26 @@
 
 <body>
 
-
-<div class="row">
-		<div class="col-md-12">
-				<div id="controls" style="border: solid 1px black; width:100%; height:85px"></div>
-		</div>
-</div>
-
-
-
-
-<div id="sample">
-
-
-
 	
 
-	<div id="frame" style="border: solid 1px black; width:100%; height:500px"></div>
-	<div style="display:none;" id='scada-show'>
+<div>
+	<div id="currentFile">
+		 (nombre del proyecto)
+	</div>
+	<div id="menuBar">
+	<ul id="nav">
+		<li><a href="#">Archivo</a>
+			<ul>
+				<li><a href="#" onclick="saveDocumentAs()">Guardar</a></li>
+				<li><a href="#" onclick="removeDocument()">Eliminar Proyecto</a></li>
+			</ul>
+		</li>
+		<li><a href="#" onclick="">Monitoreo</a></li>
+	</ul>
+	</div><!--END menu bar -->
+
+	<div id="PaletteAndDiagram" style="position: relative; overflow: hidden; width: 100%;">
+		<div style="display:none;" id='scada-show'>
 			<a id="scada-show-more" class="" href="javascript:void(0);" >
 				<i  style="cursor:pointer;" class="fa fa-plus" aria-hidden="true">
 				</i>
@@ -63,53 +236,31 @@
 				<i  style="cursor:pointer;" class="fa fa-trash" aria-hidden="true">
 				</i>
 			</a>
+</div>
+	
+	
+		<div id="sideBar" style="float:left; width:23%; min-height: 500px; text-align:center">
+			<div class="handle">Controles</div>
+			<div id="controls" style="border:solid 1px gray; width: 100%; min-height: 300px"></div>
+			<div class="handle">Tuberias</div>
+			<div id="controls-pipes" style="border:solid 1px gray; width: 100%; min-height: 500px"></div>
+			<div class="handle">Vista</div>
+			<div id="overview" style="border:solid 1px gray; width: 100%; height:225px;"></div>
+		</div>
+		<div id="frame" style="position: absolute; border: solid 1px gray; width:77%; height: 100%; min-height:500px; margin-left:23%; background-color:white"></div>
 	</div>
 
 
-	<div>
-			<button id="save_scada" type="button"  >Guardar</button>
-	</div>
-	
-	
-	<div class="text-center">
-            <button class="demo btn btn-primary btn-large" data-toggle="modal" href="#scada-modal">View Demo</button>
-     </div>
 	
 
-<div id="scada-modal" class="modal hide fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
-  <div class="modal-header">
-		<h4 class="modal-title">...</h4>
-  </div>
-  <div class="modal-body">
-    
-  </div>
-  <div class="modal-footer">
-    <button type="button" data-dismiss="modal" class="btn">Cancelar</button>
-    <button type="button" data-dismiss="modal" class="btn btn-primary">Guardar</button>
-  </div>
 </div>
 
-	
-<div id="scada-modal-delete" class="modal hide fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
-  <div class="modal-header">
-		<h4 class="modal-title">Eliminar Objeto </h4>
-  </div>
-  <div class="modal-body">
-      <p>¿Seguro que desea eliminar {object} ?</p>
-  </div>
-  <div class="modal-footer">
-    <button type="button" data-dismiss="modal" class="btn">Cancelar</button>
-    <button id="delete-action-scada" type="button" data-dismiss="modal" class="btn btn-primary">Eliminar</button>
-  </div>
-</div>
 
 	
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
- 
-</div>
-	
-	 <script type="text/javascript" src="http://getbootstrap.com/2.3.2/assets/js/google-code-prettify/prettify.js"></script>
-   <script src="http://getbootstrap.com/2.3.2/assets/js/bootstrap.js"></script>
+
 
 <script>
 
@@ -134,10 +285,13 @@
 			this.canvas 		= null;
 			this.controlId		= "controls";
 			this.control 		= null ;
+			this.pipeId 		= null ;
+			this.controlPipe 	= null ;
 			this.saveBtn		= "#save_scada";
 			this.imgLocation    = "images/{pattern}.png";
 			this.modelData		= null;
 			this.controlData    = null ;
+			this.controlData2   = null ;
 			
 		}
 		
@@ -156,6 +310,7 @@
 												this.$$(go.Shape, "LineV", { stroke: "gray", strokeWidth: 0.5, interval: 10 })
 											),
 											allowDrop: true, 
+											draggingTool: new GuidedDraggingTool(),
 											"draggingTool.dragsLink": true,
 											"draggingTool.isGridSnapEnabled": true,
 											"linkingTool.isUnconnectedLinkValid": true,
@@ -186,7 +341,11 @@
 				
 			this.nodeSelectionAdornmentTemplate =
 				this.$$(go.Adornment, "Auto",
-					this.$$(go.Shape, { fill: null, stroke: "deepskyblue", strokeWidth: 1.5, strokeDashArray: [4, 2] }),
+					this.$$(go.Shape, { 
+							fill: null, 
+							stroke: "deepskyblue", 
+							strokeWidth: 1.5, 
+							strokeDashArray: [4, 2] }),
 					this.$$(go.Placeholder)
 				);
 			
@@ -221,6 +380,8 @@
 			this._TemplateMap  = new go.Map("string", go.Node);
 			this._TemplateMap.add("SCADA_A", this._FigureTemplate());
 			this._TemplateMap.add("SCADA_B", this._ImageTemplate());
+			this._TemplateMap.add("SCADA_PIPE" , this._PipeTemplate());
+			this._TemplateMap.add("SCADA_GAUGE" , this._GaugeTemplate());
 			this.canvas.nodeTemplateMap = this._TemplateMap;
 
 			
@@ -349,6 +510,161 @@
 	
 	}
 	
+	_GaugeTemplate(){
+	
+	    //template especial para general el sistema de sensores 
+	
+		return  this.$$(go.Node, "Auto",
+		{ 
+			//resizable: true//,
+			locationSpot: go.Spot.Center
+		},  
+		new go.Binding("angle").makeTwoWay(),	
+		new go.Binding('width').makeTwoWay(),
+        new go.Binding('height').makeTwoWay(), 
+        this.$$(go.Shape, "Rectangle",
+          { 
+		    width : 100 ,
+			height : 100 ,
+			stroke: "blue", 
+			strokeWidth: 0, 
+			spot1: go.Spot.TopLeft,
+			spot2: go.Spot.BottomRight },
+			new go.Binding("stroke", "color")),
+			this.$$(go.Panel, "Spot",
+            this.$$(go.Panel, "Graduated",
+            {
+			  width : 95 ,
+			  height : 95 ,
+              name: "SCALE", 
+			  margin: 2,
+              graduatedTickUnit: 5,  // tick marks at each multiple of 2.5
+              graduatedMax: 100,  // this is actually the default value
+              stretch: go.GraphObject.None  // needed to avoid unnecessary re-measuring!!!
+            },
+      	
+            this.$$(go.Shape, {
+							width : 90 ,
+						    height : 90 ,
+							name: "SHAPE", 
+							geometryString: "M-70.7 70.7 B135 270 0 0 100 100 M0 100", 
+							stroke: "white", 
+							strokeWidth: 4 
+			}),
+            // three differently sized tick marks
+            this.$$(go.Shape, { 
+							width : 5 ,
+							height : 5 ,
+							geometryString: "M0 0 V10", 
+							stroke: "white",
+							strokeWidth: 1.5 
+			}),
+            this.$$(go.Shape, {
+						width : 5 ,
+						height : 5 ,
+						geometryString: "M0 0 V12", 
+						stroke: "white", 
+						strokeWidth: 2.5, 
+						interval: 2
+			}),
+			  this.$$(go.Shape, {
+						width : 5 ,
+						height : 5 ,
+						geometryString: "M0 0 V15", 
+						stroke: "white",
+						strokeWidth: 3.5,
+						interval: 4 
+			}),
+            this.$$(go.TextBlock,
+              { 
+				//width : 5 ,
+				//height : 5 ,
+                interval: 4,
+                alignmentFocus: go.Spot.Center,
+                font: "bold italic 5pt sans-serif", stroke: "white",
+                segmentOffset: new go.Point(0, 30)
+              })
+          ),
+          this.$$(go.TextBlock,
+            { 
+					//width : 20 ,
+					//height : 20 ,
+					alignment: new go.Spot(0.5, 0.9), 
+					stroke: "white", 
+					font: "bold italic 8pt sans-serif" },
+					new go.Binding("text", "text"),
+					new go.Binding("stroke", "color")),
+					this.$$(go.Shape, { 
+								width : 80 ,
+								//height : 95 ,
+								fill: "blue", 
+								strokeWidth: 1,
+								geometryString: "F1 M-6 0 L0 -6 100 0 0 6z x M-100 0" 
+					},
+					new go.Binding("angle", "value", this._convertValueToAngle)),
+					this.$$(go.Shape, "Circle", { width: 2, height: 2, fill: "white" })
+        )
+      );
+
+	}
+	
+     _convertValueToAngle(v, shape) {
+      var scale = shape.part.findObject("SCALE");
+      var p = scale.graduatedPointForValue(v);
+      var shape = shape.part.findObject("SHAPE");
+      var c = shape.actualBounds.center;
+      return c.directionPoint(p);
+    }
+
+	_PipeTemplate(){
+	
+	  function portFigure(pid) {
+	  
+	  
+		if (pid === null || pid === "") return "XLine";
+		if (pid[0] === 'F') return "CircleLine";
+		if (pid[0] === 'M') return "PlusLine";
+		return "XLine";  
+		}
+		
+		return this.$$(go.Node, "Spot",
+        {
+          locationObjectName: "SHAPE",
+          locationSpot: go.Spot.Center,
+          selectionAdorned: true , 
+          itemTemplate:
+            this.$$(go.Panel,
+              new go.Binding("portId", "id"),
+              new go.Binding("alignment", "spot", go.Spot.parse),
+              this.$$(go.Shape, "XLine",
+                { width: 6, height: 6, background: "transparent", fill: null, stroke: "gray" },
+                new go.Binding("figure", "id", portFigure),  
+                new go.Binding("angle", "angle"))
+          ),
+          linkConnected: function(node, link, port) {
+            if (link.category === "") port.visible = false;
+          },
+          linkDisconnected: function(node, link, port) {
+           if (link.category === "") port.visible = true;
+          }
+        },
+        new go.Binding("itemArray", "ports"),
+        new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
+        new go.Binding("angle", "angle").makeTwoWay(),
+        new go.Binding("layerName", "isSelected", function(s) { return s ? "Foreground" : ""; }).ofObject(),
+        this.$$(go.Shape,
+          {
+            name: "SHAPE",
+            geometryString: "F1 M0 0 L20 0 20 20 0 20 z",
+            fill: "rgba(128, 128, 128, 0.5)"
+          },
+          new go.Binding("geometryString", "geo"),
+          new go.Binding("stroke", "isSelected", function(s) { return s ? "dodgerblue" : "black"; }).ofObject())
+		  
+      );
+	
+	}
+	
 	
 	_makePort(name, spot, output, input  ) {
 			return this.$$(go.Shape, "Circle",
@@ -451,8 +767,8 @@
 						l.mouseOver = function(e,node){
 		
 							$("#scada-show").css({
-								left 		:  node.part.position.x + 50 ,
-								top  		:  (node.part.position.y  -  $("#frame").height()) - 25 ,
+								left 		:  node.part.position.x   + 40 ,
+								top  		:  (node.part.position.y  -  $("#frame").height()) - 45 ,
 								position 	: "relative",
 								'z-index'   : '100000000',
 								display 	: 'inline',
@@ -524,7 +840,6 @@
 
 	}
 	
-	
 	_modalParams( data = null  ){
 	
 		   let _p = {
@@ -569,13 +884,14 @@
 		 
 	}
 	
-	
 	_delAction(part = $temp){
 		this.canvas.remove(part);
 	}
 	
 	_createModal( $params = null ){
 	     
+		 //creamos el modal con los parametros necesarios 
+		 
 		 let s = $("#scada-modal");
 		 
 		 s.find(".modal-header")
@@ -584,7 +900,6 @@
 		
 		 s.modal();
 	}
-	
 	
 	_nodeClick(e, node ){
 	
@@ -631,11 +946,67 @@
 	
 	}
 	
-	
-	
 	_controlBarConf(){
 	
+	  
 		 this.control =  this.$$(go.Palette, this.controlId ,  
+		  {
+				maxSelectionCount: 1, 
+				nodeTemplateMap: this.canvas.nodeTemplateMap,
+				groupTemplate: this.canvas.groupTemplate,
+				layout: this.$$(go.GridLayout),
+				linkTemplate: 
+				this.$$(go.Link,
+				{
+						locationSpot: go.Spot.Center,
+						selectionAdornmentTemplate:
+						this.$$(go.Adornment, "Link",
+								{ 
+										locationSpot: go.Spot.Center 
+								},
+						this.$$(go.Shape,
+							{ 
+								isPanelMain: true, 
+								fill: null, 
+								stroke: "blue", 
+								strokeWidth: 0
+								
+							}),
+                    this.$$(go.Shape,  
+                      { 
+							toArrow: "Standard", 
+							stroke: null 
+					   })
+                  )
+              },
+              {
+                routing: go.Link.AvoidsNodes,
+                curve: go.Link.JumpOver,
+                corner: 5,
+                toShortLength: 10 //,
+				//click : function(a,b){ console.log("funcion");}
+              },
+              new go.Binding("points"),
+              this.$$(go.Shape,  
+                { 
+						isPanelMain: true, 
+						strokeWidth: 5
+				}),
+              this.$$(go.Shape, 
+                { 
+						toArrow: "Standard",
+						stroke: null 
+				})
+            )
+        });
+		  
+	
+	
+	}
+	
+	_controlBarPipe(){
+	
+		 this.controlPipe =  this.$$(go.Palette, "controls-pipes",  
 		  {
 				maxSelectionCount: 1, 
 				nodeTemplateMap: this.canvas.nodeTemplateMap,
@@ -690,12 +1061,12 @@
 	
 	}
 	
-	
 	_controlBar(){
 	
 		 this._controlBarConf();
+		 this._controlBarPipe();
 		  
-		 //creamos las lineas 
+		 //PARA CONTROL BAR ESTAS LINEAS DE CODIGO SON LAS BUENAS AHI XD 
 		 var line = [
 				{
 						points: new go.List(go.Point).addAll(
@@ -709,9 +1080,10 @@
 							  active : true 
 						},
 						func : null , 
-						sid  : null 
+						sid  : null
 					
 				}
+			
           ];
 		  
 
@@ -720,11 +1092,198 @@
 					return;
 		  }
 				
-				
+
 		 this.control.model = new go.GraphLinksModel(
 			this.controlData,
-			line 
+			line
 		 );
+		 
+		 
+		//FIN DE ESAS LINEAS DE CODIGO 
+		 
+		 
+		//CREAR EL OVERVIEW  
+		let overView  =
+			this.$$(go.Overview, "overview",
+					{ observed: this.canvas, maxScale: 0.5 });
+					
+	
+	    //DARLE VIDA AL OVERVIEW 
+		overView.box.elt(0).stroke = "dodgerblue";
+		
+		//PARA LOS PIPES ESTAS LINEAS SON LAS BUENAS 
+		
+		
+		/*let pipes = [
+				{
+                  key: 1,
+                  geo: "F1 M0 0 L20 0 20 20 0 20z",
+                  ports: [
+                   // { id: "U6", spot: "0.5 0 0 0.5" },
+                   // { id: "U2", spot: "0.5 1 0 -0.5" }
+                  ],
+				  category : "SCADA_PIPE"
+                },
+				{
+                  key: 3, angle: 90,
+                  geo: "F1 M0 0 L20 0 20 20 0 20z",
+                  ports: [
+                    //{ id: "U6", spot: "0.5 0 0 0.5" },
+                    //{ id: "U2", spot: "0.5 1 0 -0.5" }
+                  ],
+				  category : "SCADA_PIPE"
+               },
+			    {
+                  key: 5,
+                  geo: "F1 M0 0 L20 0 20 60 0 60z",
+                  ports: [
+                   // { id: "U6", spot: "0.5 0 0 0.5" },
+                   // { id: "U2", spot: "0.5 1 0 -0.5" }
+                  ]
+				  ,
+				  category : "SCADA_PIPE"
+                },
+                {
+                  key: 7, angle: 90,
+                  geo: "F1 M0 0 L20 0 20 60 0 60z",
+                  ports: [
+                   // { id: "U6", spot: "0.5 0 0 0.5" },
+                   // { id: "U2", spot: "0.5 1 0 -0.5" }
+                  ],
+				  category : "SCADA_PIPE"
+                },
+                {
+                  key: 11,
+                  geo: "F1 M0 40 L0 30 Q0 0 30 0 L40 0 40 20 30 20 Q20 20 20 30 L20 40z",
+                  ports: [
+                   // { id: "U0", spot: "1 0.25 -0.5 0.25" },
+                   // { id: "U2", spot: "0.25 1 0.25 -0.5" }
+                  ],
+				  category : "SCADA_PIPE"
+                },
+                {
+                  key: 12, angle: 90,
+                  geo: "F1 M0 40 L0 30 Q0 0 30 0 L40 0 40 20 30 20 Q20 20 20 30 L20 40z",
+                  ports: [
+                    //{ id: "U0", spot: "1 0.25 -0.5 0.25" },
+                    //{ id: "U2", spot: "0.25 1 0.25 -0.5" }
+                  ],
+				  category : "SCADA_PIPE"
+                },
+                {
+                  key: 13, angle: 180,
+                  geo: "F1 M0 40 L0 30 Q0 0 30 0 L40 0 40 20 30 20 Q20 20 20 30 L20 40z",
+                  ports: [
+                   // { id: "U0", spot: "1 0.25 -0.5 0.25" },
+                   // { id: "U2", spot: "0.25 1 0.25 -0.5" }
+                  ],
+				  category : "SCADA_PIPE"
+                },
+                {
+                  key: 14, angle: 270,
+                  geo: "F1 M0 40 L0 30 Q0 0 30 0 L40 0 40 20 30 20 Q20 20 20 30 L20 40z",
+                  ports: [
+                   // { id: "U0", spot: "1 0.25 -0.5 0.25" },
+                   // { id: "U2", spot: "0.25 1 0.25 -0.5" }
+                  ],
+				  category : "SCADA_PIPE"
+                },
+                {
+                  key: 21,
+                  geo: "F1 M0 0 L60 0 60 20 50 20 Q40 20 40 30 L40 40 20 40 20 30 Q20 20 10 20 L0 20z",
+                  ports: [
+                   // { id: "U0", spot: "1 0.25 -0.5 0.25" },
+                    //{ id: "U4", spot: "0 0.25 0.5 0.25" },
+                   // { id: "U2", spot: "0.5 1 0 -0.5" }
+                  ],
+				  category : "SCADA_PIPE"
+                },
+                {
+                  key: 22, angle: 90,
+                  geo: "F1 M0 0 L60 0 60 20 50 20 Q40 20 40 30 L40 40 20 40 20 30 Q20 20 10 20 L0 20z",
+                  ports: [
+                   // { id: "U0", spot: "1 0.25 -0.5 0.25" },
+                   // { id: "U4", spot: "0 0.25 0.5 0.25" },
+                   // { id: "U2", spot: "0.5 1 0 -0.5" }
+                  ],
+				  category : "SCADA_PIPE"
+                },
+                {
+                  key: 23, angle: 180,
+                  geo: "F1 M0 0 L60 0 60 20 50 20 Q40 20 40 30 L40 40 20 40 20 30 Q20 20 10 20 L0 20z",
+                  ports: [
+                   // { id: "U0", spot: "1 0.25 -0.5 0.25" },
+                   // { id: "U4", spot: "0 0.25 0.5 0.25" },
+                   // { id: "U2", spot: "0.5 1 0 -0.5" }
+                  ],
+				  category : "SCADA_PIPE"
+                },
+                {
+                  key: 24, angle: 270,
+                  geo: "F1 M0 0 L60 0 60 20 50 20 Q40 20 40 30 L40 40 20 40 20 30 Q20 20 10 20 L0 20z",
+                  ports: [
+                   // { id: "U0", spot: "1 0.25 -0.5 0.25" },
+                    //{ id: "U4", spot: "0 0.25 0.5 0.25" },
+                    //{ id: "U2", spot: "0.5 1 0 -0.5" }
+                  ],
+				  category : "SCADA_PIPE"
+                },
+                {
+                  key: 31,
+                  geo: "F1 M0 0 L20 0 20 10 Q20 14.142 22.929 17.071 L30 24.142 15.858 38.284 8.787 31.213 Q0 22.426 0 10z",
+                  ports: [
+                   // { id: "U6", spot: "0 0 10.5 0.5" },
+                  //  { id: "U1", spot: "1 1 -7.571 -7.571", angle: 45 }
+                  ],
+				  category : "SCADA_PIPE"
+                },
+                {
+                  key: 32, angle: 90,
+                  geo: "F1 M0 0 L20 0 20 10 Q20 14.142 22.929 17.071 L30 24.142 15.858 38.284 8.787 31.213 Q0 22.426 0 10z",
+                  ports: [
+                   // { id: "U6", spot: "0 0 10.5 0.5" },
+                   // { id: "U1", spot: "1 1 -7.571 -7.571", angle: 45 }
+                  ],
+				  category : "SCADA_PIPE"
+                },
+                {
+                  key: 33, angle: 180,
+                  geo: "F1 M0 0 L20 0 20 10 Q20 14.142 22.929 17.071 L30 24.142 15.858 38.284 8.787 31.213 Q0 22.426 0 10z",
+                  ports: [
+                   // { id: "U6", spot: "0 0 10.5 0.5" },
+                   // { id: "U1", spot: "1 1 -7.571 -7.571", angle: 45 }
+                  ],
+				  category : "SCADA_PIPE"
+                },
+                {
+                  key: 34, angle: 270,
+                  geo: "F1 M0 0 L20 0 20 10 Q20 14.142 22.929 17.071 L30 24.142 15.858 38.284 8.787 31.213 Q0 22.426 0 10z",
+                  ports: [
+                   // { id: "U6", spot: "0 0 10.5 0.5" },
+                   // { id: "U1", spot: "1 1 -7.571 -7.571", angle: 45 }
+                  ],
+				  category : "SCADA_PIPE"
+                },
+                {
+                  key: 41,
+                  geo: "F1 M14.142 0 L28.284 14.142 14.142 28.284 0 14.142z",
+                  ports: [
+                   // { id: "U1", spot: "1 1 -7.321 -7.321" },
+                   // { id: "U3", spot: "0 1 7.321 -7.321" },
+                   // { id: "U5", spot: "0 0 7.321 7.321" },
+                   // { id: "U7", spot: "1 0 -7.321 7.321" }
+                  ],
+				  category : "SCADA_PIPE"
+                }
+
+		];*/
+		
+
+		if(this.controlData2 !== null )
+				this.controlPipe.model = new go.GraphLinksModel(this.controlData2);
+		
+		//FIN DE LAS LINEAS DE LOS PIPES 
+
 		
 
 		
@@ -769,10 +1328,10 @@
 				toShortLength: 7 
 		},
         new go.Binding("points").makeTwoWay(),
-        this.$$(go.Shape, { isPanelMain: true, stroke: "black", strokeWidth: 5 }),
-        this.$$(go.Shape, { isPanelMain: true, stroke: "gray", strokeWidth: 3 }),
-        this.$$(go.Shape, { isPanelMain: true, stroke: "white", strokeWidth: 1, name: "PIPE", strokeDashArray: [10, 10] }),
-        this.$$(go.Shape, { toArrow: "Triangle", fill: "black", stroke: null })
+        this.$$(go.Shape, { isPanelMain: true, stroke: "blue", strokeWidth: 5 }),
+        this.$$(go.Shape, { isPanelMain: true, stroke: "blue", strokeWidth: 11 }),
+        this.$$(go.Shape, { isPanelMain: true, stroke: "white", strokeWidth: 2, name: "PIPE", strokeDashArray: [10, 10] }),
+        this.$$(go.Shape, { toArrow: "Triangle", fill: "blue", stroke: null , strokeWidth: 12})
       );
 	
 	
@@ -810,7 +1369,9 @@ class Scada extends ScadaTools {
 			this.events();
 		}
 		
-		setConfLocale(cnf = null ){
+		setConfLocale(cnf  ){
+		
+			
 		
 			if( cnf == null)  {
 					
@@ -818,8 +1379,10 @@ class Scada extends ScadaTools {
 					this.controlId		= "controls";
 					this.saveBtn		= "#save_scada";
 					this.imgLocation    = "images/{pattern}.png";
+					this.pipeId			= "controls-pipes"
 			}
 			
+		
 			if(typeof Cnf !== 'object' ) return null;
 			
 			if( cnf.canvas !== 'undefined' 
@@ -836,11 +1399,18 @@ class Scada extends ScadaTools {
 					|| cnf.savebtn !== null 
 					|| cnf.savebtn !== '')
 						this.saveBtn = cnf.savebtn;
+					
 						
 			if( cnf.img_location !== 'undefined' 
 					|| cnf.img_location!== null 
 					|| cnf.img_location !== '')
 						this.imgLocation = cnf.img_location;
+			
+			
+			if(typeof cnf.controlPipe !== 'undefined')
+					this.pipeID = cnf.controlPipe;
+					
+	
 		
 		}
 		
@@ -862,8 +1432,9 @@ class Scada extends ScadaTools {
 		}
 		
 		
-		setControls (controls = null) {
-			this.controlData = controls;
+		setControls (controls = null , controls2 = null ) {
+			this.controlData 		= controls;
+			this.controlData2 		= controls2;
 		}
 
 	
@@ -884,11 +1455,15 @@ class Scada extends ScadaTools {
 			canvas      	: "frame",
 			control     	: "controls",
 			savebtn     	: "#save_scada",
-			img_location 	: "images/{pattern}.png"
+			img_location 	: "images/{pattern}.png",
+			controlPipe		: "controls-pipes"
 			
-		})
+		});
+		
+		
 		
 		let items = [
+		
 		     {
 					text: "Tanque",
 					name : "Tank",
@@ -908,8 +1483,19 @@ class Scada extends ScadaTools {
 					desiredSize 		: new go.Size(35, 35),
 					category 			: 'SCADA_A',
 					sid 				: null, 
-					state 				: { active : true } ,
-					func 				: {}
+					properties 			: [
+						{ name : "variable" ,   value : null , 		func : null  },
+						{ name : "position" ,   value : null   , 	func : null  },
+						{ name : "active" ,  	value : true  , 	func : null  },	
+					    { name : "styles" , 	value : [] , 		func : null},
+						{ name : "visible" ,    value : true  ,       func : null },
+						{ name : "graph" ,      value : { type : "linear" , data : {}  } , func : null },
+						{ personalize : {
+								max : 0,
+								min : 0,
+								type : "tank"
+						}}
+					]
 			 },
 			 {
 				name 		: "GATO",
@@ -925,7 +1511,27 @@ class Scada extends ScadaTools {
 			 }
 		];
 		
-		scada.setControls(items);
+		
+		let items2 = [
+		
+				{  
+						text: "Sensor", 
+						value: 0 , 
+						category:"SCADA_GAUGE",
+						figure : "gauge",
+						name : "Gauge",
+						properties : [],
+						styles : [],
+					    func : null,
+					    state : { active : true } , 
+						sid : null ,
+						width : 100 ,
+						height: 100
+				}
+		
+		];
+		
+		scada.setControls(items , items2 );
 		scada.Create();
 		
 		
@@ -962,5 +1568,7 @@ class Scada extends ScadaTools {
 
 
 </script>
+
+
 </body>
 </html>
