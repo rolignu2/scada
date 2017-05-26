@@ -240,9 +240,9 @@
 	
 	
 		<div id="sideBar" style="float:left; width:23%; min-height: 500px; text-align:center">
-			<div class="handle">Controles</div>
+			<div class="handle">Controles Principales</div>
 			<div id="controls" style="border:solid 1px gray; width: 100%; min-height: 300px"></div>
-			<div class="handle">Tuberias</div>
+			<div class="handle">Otros Controles</div>
 			<div id="controls-pipes" style="border:solid 1px gray; width: 100%; min-height: 500px"></div>
 			<div class="handle">Vista</div>
 			<div id="overview" style="border:solid 1px gray; width: 100%; height:225px;"></div>
@@ -381,7 +381,8 @@
 			this._TemplateMap.add("SCADA_A", this._FigureTemplate());
 			this._TemplateMap.add("SCADA_B", this._ImageTemplate());
 			this._TemplateMap.add("SCADA_PIPE" , this._PipeTemplate());
-			this._TemplateMap.add("SCADA_GAUGE" , this._GaugeTemplate());
+			this._TemplateMap.add("SCADA_GAUGE_1" , this._GaugeTemplate());
+			this._TemplateMap.add("SCADA_GAUGE_2" , this._GaugeTemplate("flow"));
 			this.canvas.nodeTemplateMap = this._TemplateMap;
 
 			
@@ -435,11 +436,7 @@
 						this._makePort("B", go.Spot.Bottom, true, false),
 						{ 
 							mouseEnter: function(e, node ) { scada.showSmallPorts(node, true ); },
-							mouseLeave: function(e, node ) { scada.showSmallPorts(node, false ); },
-							click : function(e,node) {
-								 //ejecuta la accion del control o nodo 
-								 //scada._nodeClick(e,node);
-							}
+							mouseLeave: function(e, node ) { scada.showSmallPorts(node, false ); }
 						}
 			);
 	
@@ -500,20 +497,27 @@
 						this._makePort("B", go.Spot.Bottom, true, false),
 						{ 
 							mouseEnter: function(e, node ) { scada.showSmallPorts(node, true ); },
-							mouseLeave: function(e, node ) { scada.showSmallPorts(node, false ); },
-							click : function(e,node) {
-								 //ejecuta la accion del control o nodo 
-								// scada._nodeClick(e,node);
-							}
+							mouseLeave: function(e, node ) { scada.showSmallPorts(node, false ); }
 						}
 			);
 	
 	}
 	
-	_GaugeTemplate(){
+	_GaugeTemplate( type = "manometer"){
 	
 	    //template especial para general el sistema de sensores 
-	
+		
+		var s = "Rectangle";
+		var t = "Blue";
+		var k = "White"
+		
+		if(type == "flow"){
+			 s= "Circle";
+			 t = "Red";
+			 k = "Yellow";
+		}
+		
+		
 		return  this.$$(go.Node, "Auto",
 		{ 
 			//resizable: true//,
@@ -522,11 +526,11 @@
 		new go.Binding("angle").makeTwoWay(),	
 		new go.Binding('width').makeTwoWay(),
         new go.Binding('height').makeTwoWay(), 
-        this.$$(go.Shape, "Rectangle",
+        this.$$(go.Shape, s,
           { 
 		    width : 100 ,
 			height : 100 ,
-			stroke: "blue", 
+			stroke: t, 
 			strokeWidth: 0, 
 			spot1: go.Spot.TopLeft,
 			spot2: go.Spot.BottomRight },
@@ -548,7 +552,7 @@
 						    height : 90 ,
 							name: "SHAPE", 
 							geometryString: "M-70.7 70.7 B135 270 0 0 100 100 M0 100", 
-							stroke: "white", 
+							stroke: k, 
 							strokeWidth: 4 
 			}),
             // three differently sized tick marks
@@ -556,14 +560,14 @@
 							width : 5 ,
 							height : 5 ,
 							geometryString: "M0 0 V10", 
-							stroke: "white",
+							stroke: k,
 							strokeWidth: 1.5 
 			}),
             this.$$(go.Shape, {
 						width : 5 ,
 						height : 5 ,
 						geometryString: "M0 0 V12", 
-						stroke: "white", 
+						stroke:k, 
 						strokeWidth: 2.5, 
 						interval: 2
 			}),
@@ -571,7 +575,7 @@
 						width : 5 ,
 						height : 5 ,
 						geometryString: "M0 0 V15", 
-						stroke: "white",
+						stroke: k,
 						strokeWidth: 3.5,
 						interval: 4 
 			}),
@@ -590,31 +594,33 @@
 					//width : 20 ,
 					//height : 20 ,
 					alignment: new go.Spot(0.5, 0.9), 
-					stroke: "white", 
+					stroke: k, 
 					font: "bold italic 8pt sans-serif" },
 					new go.Binding("text", "text"),
 					new go.Binding("stroke", "color")),
 					this.$$(go.Shape, { 
 								width : 80 ,
 								//height : 95 ,
-								fill: "blue", 
+								fill: t, 
 								strokeWidth: 1,
 								geometryString: "F1 M-6 0 L0 -6 100 0 0 6z x M-100 0" 
 					},
 					new go.Binding("angle", "value", this._convertValueToAngle)),
 					this.$$(go.Shape, "Circle", { width: 2, height: 2, fill: "white" })
-        )
+        ),
+		this._makePort("T", go.Spot.Top, false, true  ),
+						this._makePort("L", go.Spot.Left, true, true),
+						this._makePort("R", go.Spot.Right, true, true),
+						this._makePort("B", go.Spot.Bottom, true, false),
+						{ 
+							mouseEnter: function(e, node ) { scada.showSmallPorts(node, true ); },
+							mouseLeave: function(e, node ) { scada.showSmallPorts(node, false ); }
+						}
       );
 
 	}
 	
-     _convertValueToAngle(v, shape) {
-      var scale = shape.part.findObject("SCALE");
-      var p = scale.graduatedPointForValue(v);
-      var shape = shape.part.findObject("SHAPE");
-      var c = shape.actualBounds.center;
-      return c.directionPoint(p);
-    }
+   
 
 	_PipeTemplate(){
 	
@@ -648,37 +654,21 @@
            if (link.category === "") port.visible = true;
           }
         },
-        new go.Binding("itemArray", "ports"),
-        new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
-        new go.Binding("angle", "angle").makeTwoWay(),
-        new go.Binding("layerName", "isSelected", function(s) { return s ? "Foreground" : ""; }).ofObject(),
-        this.$$(go.Shape,
+       // new go.Binding("itemArray", "ports"),
+      //  new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
+       // new go.Binding("angle", "angle").makeTwoWay(),
+       // new go.Binding("layerName", "isSelected", function(s) { return s ? "Foreground" : ""; }).ofObject(),
+       	   this.$$(go.Shape,
           {
             name: "SHAPE",
             geometryString: "F1 M0 0 L20 0 20 20 0 20 z",
             fill: "rgba(128, 128, 128, 0.5)"
           },
           new go.Binding("geometryString", "geo"),
-          new go.Binding("stroke", "isSelected", function(s) { return s ? "dodgerblue" : "black"; }).ofObject())
-		  
+          new go.Binding("stroke", "isSelected", function(s) { return s ? "dodgerblue" : "black"; }).ofObject()
+		  )
       );
 	
-	}
-	
-	
-	_makePort(name, spot, output, input  ) {
-			return this.$$(go.Shape, "Circle",
-               {
-                  fill: null,  
-                  stroke: null,
-                  desiredSize: new go.Size(7, 7),
-                  alignment: spot, 
-                  alignmentFocus: spot, 
-                  portId: name,  
-                  fromSpot: spot, toSpot: spot,  
-                  fromLinkable: output, toLinkable: input,  
-                  cursor: "pointer" 
-               });
 	}
 	
 
@@ -914,6 +904,10 @@
 	
 	}
 	
+	
+	 /***
+	    funcion ciclo A , esta funcion realiza un ciclo por cada 200 milisegundos 
+	 *****/
 	_loop(){
 	
 		var diagram = this.canvas;
@@ -922,30 +916,61 @@
 		setTimeout(function() {
 		
 		
-				var oldskips = diagram.skipsUndoManager;
-				diagram.skipsUndoManager = true;
-				
-				diagram.links.each(function(link) {
-					var d = link.part.data;
-					/*if(!d.state.active )
-							console.log("no activa");*/
-							
-					var shape = link.findObject("PIPE");
-					var off  = 0;
-				try{
-					off = shape.strokeDashOffset - 2;
-					shape.strokeDashOffset = (off <= 0) ? 20 : off;
-				}
-				catch(e){ }
-			});
+			//ciclo para los pipe o tuberias , efecto de agua corriendo 
+		    $this._PipeLoop(diagram , $this);
 			
 			
-			diagram.skipsUndoManager = oldskips;
+			
+			
+			
 		    $this._loop();
 		}, 200);
 	
 	}
 	
+	
+	_PipeLoop(diagram , $this ){
+	
+				try{
+						
+					var oldskips = diagram.skipsUndoManager;
+					diagram.skipsUndoManager = true;
+						
+					diagram.links.each(function(link) {
+					
+						var d = link.part.data;	
+						var shape = link.findObject("PIPE");
+						var off  = 0;
+						
+						if(d.active != true ) return false;
+						
+						if(!d.rollback){
+							try{
+								off = shape.strokeDashOffset - 2;
+								shape.strokeDashOffset = (off <= 0) ? 20 : off;
+							}
+							catch(k){}
+						}
+						else {
+								try{
+									off = shape.strokeDashOffset + 2;
+									shape.strokeDashOffset = (off <= 0) ? 20 : off;
+								}catch(j){}
+						}
+						
+					});
+				
+				}
+				catch(e){
+				
+				}
+			
+			diagram.skipsUndoManager = oldskips;
+	}
+	
+	/****
+		controlbar primario en configuracion
+	****/
 	_controlBarConf(){
 	
 	  
@@ -1004,6 +1029,12 @@
 	
 	}
 	
+	
+	/****
+		controlbar secundario 
+		se le coloco como pipe porque aca iban a ir una serie de tuberias 
+		pero se opto mejor con trabajar con una sola tuberia dinamica o linkbar
+	****/
 	_controlBarPipe(){
 	
 		 this.controlPipe =  this.$$(go.Palette, "controls-pipes",  
@@ -1061,6 +1092,13 @@
 	
 	}
 	
+	
+	
+	/***
+		controlbar es una funcion secundaria de carga de objetos a los respectivos 
+		sidebars o bars , existen dos tipos de sidebars asi que el controlbar
+		debera de llevar dos graph link model 
+	****/
 	_controlBar(){
 	
 		 this._controlBarConf();
@@ -1076,9 +1114,8 @@
 														new go.Point(60, 40)
 													]),
 						type : "line",
-						state : {
-							  active : true 
-						},
+						active : true  ,
+						rollback : false ,
 						func : null , 
 						sid  : null
 					
@@ -1111,174 +1148,7 @@
 	    //DARLE VIDA AL OVERVIEW 
 		overView.box.elt(0).stroke = "dodgerblue";
 		
-		//PARA LOS PIPES ESTAS LINEAS SON LAS BUENAS 
-		
-		
-		/*let pipes = [
-				{
-                  key: 1,
-                  geo: "F1 M0 0 L20 0 20 20 0 20z",
-                  ports: [
-                   // { id: "U6", spot: "0.5 0 0 0.5" },
-                   // { id: "U2", spot: "0.5 1 0 -0.5" }
-                  ],
-				  category : "SCADA_PIPE"
-                },
-				{
-                  key: 3, angle: 90,
-                  geo: "F1 M0 0 L20 0 20 20 0 20z",
-                  ports: [
-                    //{ id: "U6", spot: "0.5 0 0 0.5" },
-                    //{ id: "U2", spot: "0.5 1 0 -0.5" }
-                  ],
-				  category : "SCADA_PIPE"
-               },
-			    {
-                  key: 5,
-                  geo: "F1 M0 0 L20 0 20 60 0 60z",
-                  ports: [
-                   // { id: "U6", spot: "0.5 0 0 0.5" },
-                   // { id: "U2", spot: "0.5 1 0 -0.5" }
-                  ]
-				  ,
-				  category : "SCADA_PIPE"
-                },
-                {
-                  key: 7, angle: 90,
-                  geo: "F1 M0 0 L20 0 20 60 0 60z",
-                  ports: [
-                   // { id: "U6", spot: "0.5 0 0 0.5" },
-                   // { id: "U2", spot: "0.5 1 0 -0.5" }
-                  ],
-				  category : "SCADA_PIPE"
-                },
-                {
-                  key: 11,
-                  geo: "F1 M0 40 L0 30 Q0 0 30 0 L40 0 40 20 30 20 Q20 20 20 30 L20 40z",
-                  ports: [
-                   // { id: "U0", spot: "1 0.25 -0.5 0.25" },
-                   // { id: "U2", spot: "0.25 1 0.25 -0.5" }
-                  ],
-				  category : "SCADA_PIPE"
-                },
-                {
-                  key: 12, angle: 90,
-                  geo: "F1 M0 40 L0 30 Q0 0 30 0 L40 0 40 20 30 20 Q20 20 20 30 L20 40z",
-                  ports: [
-                    //{ id: "U0", spot: "1 0.25 -0.5 0.25" },
-                    //{ id: "U2", spot: "0.25 1 0.25 -0.5" }
-                  ],
-				  category : "SCADA_PIPE"
-                },
-                {
-                  key: 13, angle: 180,
-                  geo: "F1 M0 40 L0 30 Q0 0 30 0 L40 0 40 20 30 20 Q20 20 20 30 L20 40z",
-                  ports: [
-                   // { id: "U0", spot: "1 0.25 -0.5 0.25" },
-                   // { id: "U2", spot: "0.25 1 0.25 -0.5" }
-                  ],
-				  category : "SCADA_PIPE"
-                },
-                {
-                  key: 14, angle: 270,
-                  geo: "F1 M0 40 L0 30 Q0 0 30 0 L40 0 40 20 30 20 Q20 20 20 30 L20 40z",
-                  ports: [
-                   // { id: "U0", spot: "1 0.25 -0.5 0.25" },
-                   // { id: "U2", spot: "0.25 1 0.25 -0.5" }
-                  ],
-				  category : "SCADA_PIPE"
-                },
-                {
-                  key: 21,
-                  geo: "F1 M0 0 L60 0 60 20 50 20 Q40 20 40 30 L40 40 20 40 20 30 Q20 20 10 20 L0 20z",
-                  ports: [
-                   // { id: "U0", spot: "1 0.25 -0.5 0.25" },
-                    //{ id: "U4", spot: "0 0.25 0.5 0.25" },
-                   // { id: "U2", spot: "0.5 1 0 -0.5" }
-                  ],
-				  category : "SCADA_PIPE"
-                },
-                {
-                  key: 22, angle: 90,
-                  geo: "F1 M0 0 L60 0 60 20 50 20 Q40 20 40 30 L40 40 20 40 20 30 Q20 20 10 20 L0 20z",
-                  ports: [
-                   // { id: "U0", spot: "1 0.25 -0.5 0.25" },
-                   // { id: "U4", spot: "0 0.25 0.5 0.25" },
-                   // { id: "U2", spot: "0.5 1 0 -0.5" }
-                  ],
-				  category : "SCADA_PIPE"
-                },
-                {
-                  key: 23, angle: 180,
-                  geo: "F1 M0 0 L60 0 60 20 50 20 Q40 20 40 30 L40 40 20 40 20 30 Q20 20 10 20 L0 20z",
-                  ports: [
-                   // { id: "U0", spot: "1 0.25 -0.5 0.25" },
-                   // { id: "U4", spot: "0 0.25 0.5 0.25" },
-                   // { id: "U2", spot: "0.5 1 0 -0.5" }
-                  ],
-				  category : "SCADA_PIPE"
-                },
-                {
-                  key: 24, angle: 270,
-                  geo: "F1 M0 0 L60 0 60 20 50 20 Q40 20 40 30 L40 40 20 40 20 30 Q20 20 10 20 L0 20z",
-                  ports: [
-                   // { id: "U0", spot: "1 0.25 -0.5 0.25" },
-                    //{ id: "U4", spot: "0 0.25 0.5 0.25" },
-                    //{ id: "U2", spot: "0.5 1 0 -0.5" }
-                  ],
-				  category : "SCADA_PIPE"
-                },
-                {
-                  key: 31,
-                  geo: "F1 M0 0 L20 0 20 10 Q20 14.142 22.929 17.071 L30 24.142 15.858 38.284 8.787 31.213 Q0 22.426 0 10z",
-                  ports: [
-                   // { id: "U6", spot: "0 0 10.5 0.5" },
-                  //  { id: "U1", spot: "1 1 -7.571 -7.571", angle: 45 }
-                  ],
-				  category : "SCADA_PIPE"
-                },
-                {
-                  key: 32, angle: 90,
-                  geo: "F1 M0 0 L20 0 20 10 Q20 14.142 22.929 17.071 L30 24.142 15.858 38.284 8.787 31.213 Q0 22.426 0 10z",
-                  ports: [
-                   // { id: "U6", spot: "0 0 10.5 0.5" },
-                   // { id: "U1", spot: "1 1 -7.571 -7.571", angle: 45 }
-                  ],
-				  category : "SCADA_PIPE"
-                },
-                {
-                  key: 33, angle: 180,
-                  geo: "F1 M0 0 L20 0 20 10 Q20 14.142 22.929 17.071 L30 24.142 15.858 38.284 8.787 31.213 Q0 22.426 0 10z",
-                  ports: [
-                   // { id: "U6", spot: "0 0 10.5 0.5" },
-                   // { id: "U1", spot: "1 1 -7.571 -7.571", angle: 45 }
-                  ],
-				  category : "SCADA_PIPE"
-                },
-                {
-                  key: 34, angle: 270,
-                  geo: "F1 M0 0 L20 0 20 10 Q20 14.142 22.929 17.071 L30 24.142 15.858 38.284 8.787 31.213 Q0 22.426 0 10z",
-                  ports: [
-                   // { id: "U6", spot: "0 0 10.5 0.5" },
-                   // { id: "U1", spot: "1 1 -7.571 -7.571", angle: 45 }
-                  ],
-				  category : "SCADA_PIPE"
-                },
-                {
-                  key: 41,
-                  geo: "F1 M14.142 0 L28.284 14.142 14.142 28.284 0 14.142z",
-                  ports: [
-                   // { id: "U1", spot: "1 1 -7.321 -7.321" },
-                   // { id: "U3", spot: "0 1 7.321 -7.321" },
-                   // { id: "U5", spot: "0 0 7.321 7.321" },
-                   // { id: "U7", spot: "1 0 -7.321 7.321" }
-                  ],
-				  category : "SCADA_PIPE"
-                }
-
-		];*/
-		
-
+		//veriricando la data del control 2 
 		if(this.controlData2 !== null )
 				this.controlPipe.model = new go.GraphLinksModel(this.controlData2);
 		
@@ -1291,19 +1161,16 @@
 	
 
 	
-	_load() {
-			this.canvas.model = go.Model.fromJson(this.canvasData);
-			this.loadDiagramProperties();
-	}
-	
-	
-	loadDiagramProperties(e) {
-		var pos = this.canvas.model.modelData.position;
-		if (pos) this.canvas.initialPosition = go.Point.parse(pos);
-    }
-	
+
+	/***
+		Linktemplate es la plantilla que se usa 
+		para simular las tuberias en cual recorre el agua 
+		asi como su efecto tuberia :D 
+	****/
 
 	_linkTemplate(){
+	
+	 
 	
 	 this.linkSelectionAdornmentTemplate =
 				this.$$(go.Adornment, "Link",
@@ -1312,7 +1179,7 @@
 						isPanelMain: true, 
 						fill: null, 
 						stroke: "deepskyblue", 
-						strokeWidth: 0 
+						strokeWidth: 0
 				})
 	 );
 
@@ -1325,24 +1192,57 @@
 				curve: go.Link.JumpGap, 
 				corner: 10, 
 				reshapable: true, 
-				toShortLength: 7 
+				toShortLength: 0
 		},
         new go.Binding("points").makeTwoWay(),
-        this.$$(go.Shape, { isPanelMain: true, stroke: "blue", strokeWidth: 5 }),
+        this.$$(go.Shape, { isPanelMain: true, stroke: "blue", strokeWidth: 10 }),
         this.$$(go.Shape, { isPanelMain: true, stroke: "blue", strokeWidth: 11 }),
-        this.$$(go.Shape, { isPanelMain: true, stroke: "white", strokeWidth: 2, name: "PIPE", strokeDashArray: [10, 10] }),
-        this.$$(go.Shape, { toArrow: "Triangle", fill: "blue", stroke: null , strokeWidth: 12})
+        this.$$(go.Shape, { isPanelMain: true, stroke: "white", strokeWidth: 8, name: "PIPE", strokeDashArray: [11, 11] }),
+        this.$$(go.Shape, {  isPanelMain: true , stroke : "blue", fill: "blue", stroke: null , strokeWidth: 8})
       );
 	
 	
 	}
+	
+	
+	_load() {
+			//funcion de carga secundaria despues del constructor 
+			this.canvas.model = go.Model.fromJson(this.canvasData);
+			this.loadDiagramProperties();
+	}
+	
+	
+	loadDiagramProperties(e) {
+		//carga las propiedades generales del diagrama 
+		var pos = this.canvas.model.modelData.position;
+		if (pos) this.canvas.initialPosition = go.Point.parse(pos);
+    }
 		
-		
+	
+	/***
+		funcion de rotacion 
+	***/	
 	TopRotatingTool() {
 			return go.RotatingTool.call(this);
 	}
 	
+	/***
+	     esta funcion convierte un valor en un angulo 
+		 el angulo es de 0 a 270 radianes entonces 
+		 esta funcion se usa para los gauge 
+	***/
+	_convertValueToAngle(v, shape) {
+      var scale = shape.part.findObject("SCALE");
+      var p = scale.graduatedPointForValue(v);
+      var shape = shape.part.findObject("SHAPE");
+      var c = shape.actualBounds.center;
+      return c.directionPoint(p);
+    }
 	
+	
+	/**
+		muestra todos los puertos 
+	**/
 	showSmallPorts(node, show) {
       node.ports.each(function(port) {
         if (port.portId !== "") { 
@@ -1352,6 +1252,26 @@
     }
 		
 
+	/***
+		Crea el sistema de tuberias por medio de un puerto 
+		en ellas un to from de la api 
+	****/
+	_makePort(name, spot, output, input  ) {
+			return this.$$(go.Shape, "Circle",
+               {
+                  fill: null,  
+                  stroke: null,
+                  desiredSize: new go.Size(7, 7),
+                  alignment: spot, 
+                  alignmentFocus: spot, 
+                  portId: name,  
+                  fromSpot: spot, toSpot: spot,  
+                  fromLinkable: output, toLinkable: input,  
+                  cursor: "pointer" 
+               });
+	}
+		
+		
 	
 }
 
@@ -1509,16 +1429,19 @@ class Scada extends ScadaTools {
 				category 	: "SCADA_B",
 				text 		: ''
 			 }
+			 
+			 
 		];
 		
 		
 		let items2 = [
 		
-				{  
-						text: "Sensor", 
+            
+			 {  
+						text: "Flujometro", 
 						value: 0 , 
-						category:"SCADA_GAUGE",
-						figure : "gauge",
+						category:"SCADA_GAUGE_1",
+						figure : "flow_sensor",
 						name : "Gauge",
 						properties : [],
 						styles : [],
@@ -1526,8 +1449,51 @@ class Scada extends ScadaTools {
 					    state : { active : true } , 
 						sid : null ,
 						width : 100 ,
-						height: 100
+						height: 100,
+						properties 			: [
+						{ name : "variable" ,   value : null , 		func : null  },
+						{ name : "position" ,   value : null   , 	func : null  },
+						{ name : "active" ,  	value : true  , 	func : null  },	
+					    { name : "styles" , 	value : [] , 		func : null},
+						{ name : "visible" ,    value : true  ,       func : null },
+						{ name : "graph" ,      value : { type : "linear" , data : {}  } , func : null },
+						{ personalize : {
+								max : 0,
+								min : 0,
+								type : "flow_sensor"
+						}},
+					]
+				},
+				
+				  
+			 {  
+						text: "Manometro", 
+						value: 0 , 
+						category:"SCADA_GAUGE_2",
+						figure : "manom_sensor",
+						name : "Gauge",
+						properties : [],
+						styles : [],
+					    func : null,
+					    state : { active : true } , 
+						sid : null ,
+						width : 100 ,
+						height: 100,
+						properties 			: [
+						{ name : "variable" ,   value : null , 		func : null  },
+						{ name : "position" ,   value : null   , 	func : null  },
+						{ name : "active" ,  	value : true  , 	func : null  },	
+					    { name : "styles" , 	value : [] , 		func : null},
+						{ name : "visible" ,    value : true  ,       func : null },
+						{ name : "graph" ,      value : { type : "linear" , data : {}  } , func : null },
+						{ personalize : {
+								max : 0,
+								min : 0,
+								type : "flow_sensor"
+						}},
+					]
 				}
+				
 		
 		];
 		
@@ -1537,34 +1503,7 @@ class Scada extends ScadaTools {
 		
    });
    
-   
-   /***
-    { 		text: "Tanque",
-					name : "Tank",
-					figure: "Cylinder1", 
-					fill:  this.$$(go.Brush, "Linear",
-									{ 
-										start: go.Spot.Left, 
-										end: go.Spot.Right,
-									    0: "gray", 
-										0.5: "white", 
-										1: "gray" 
-									}
-							),
-					minSize: new go.Size(50, 50),
-					fromSpot: go.Spot.AllSides, 
-					toSpot: go.Spot.AllSides,
-					desiredSize : new go.Size(35, 35),
-					category : 'SCADA_A'
-			},
-			{
-			    key 		: "citi",
-				src 		: "50x40",
-				category 	: "SCADA_B"
-			 }
-   
-   
-   ***/
+
 
 
 </script>
