@@ -211,15 +211,19 @@
 	
 
 <div>
+
+
 	<div id="currentFile">
 		 (nombre del proyecto)
 	</div>
+	
+	
 	<div id="menuBar">
 	<ul id="nav">
 		<li><a href="#">Archivo</a>
 			<ul>
-				<li><a href="#" onclick="saveDocumentAs()">Guardar</a></li>
-				<li><a href="#" onclick="removeDocument()">Eliminar Proyecto</a></li>
+				<li><a href="#" onclick="">Guardar</a></li>
+				<li><a href="#" onclick="">Eliminar Proyecto</a></li>
 			</ul>
 		</li>
 		<li><a href="#" onclick="">Monitoreo</a></li>
@@ -227,35 +231,125 @@
 	</div><!--END menu bar -->
 
 	<div id="PaletteAndDiagram" style="position: relative; overflow: hidden; width: 100%;">
-		<div style="display:none;" id='scada-show'>
-			<a id="scada-show-more" class="" href="javascript:void(0);" >
-				<i  style="cursor:pointer;" class="fa fa-plus" aria-hidden="true">
-				</i>
-			</a>
-			<a  id="scada-delete-node" class="" href="javascript:void(0);" >
-				<i  style="cursor:pointer;" class="fa fa-trash" aria-hidden="true">
-				</i>
-			</a>
-</div>
-	
 	
 		<div id="sideBar" style="float:left; width:23%; min-height: 500px; text-align:center">
-			<div class="handle">Controles Principales</div>
+			<div class="handle">
+					Controles Principales
+			</div>
 			<div id="controls" style="border:solid 1px gray; width: 100%; min-height: 300px"></div>
 			<div class="handle">Otros Controles</div>
 			<div id="controls-pipes" style="border:solid 1px gray; width: 100%; min-height: 500px"></div>
 			<div class="handle">Vista</div>
 			<div id="overview" style="border:solid 1px gray; width: 100%; height:225px;"></div>
 		</div>
-		<div id="frame" style="position: absolute; border: solid 1px gray; width:77%; height: 100%; min-height:500px; margin-left:23%; background-color:white"></div>
-	</div>
-
-
+		<div id="frame" style="position: absolute; border: solid 1px gray; width:77%; height: 100%; min-height:500px; margin-left:23%; background-color:white">
+		
+			
+		</div>
+		
+			<!--modal elementos flotantes -->
+			<div style="display:none;" id='scada-show'>
+				<a id="scada-show-more" class="" href="javascript:void(0);" >
+					<i  style="cursor:pointer;" class="fa fa-plus" aria-hidden="true">
+					</i>
+				</a>
+				<a  id="scada-delete-node" class="" href="javascript:void(0);" >
+					<i  style="cursor:pointer;" class="fa fa-trash" aria-hidden="true">
+					</i>
+				</a>
+			</div>
+		
 	
-
+	</div>
+	
 </div>
 
 
+
+
+<!-- MODAL DE PROPIEDADES DEL OBJETO -->	
+<div id="scada-modal" class="modal fade " role="dialog">
+  
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+  
+  <div class="modal-header">
+		<h4 class="modal-title">...</h4>
+  </div>
+  <div class="modal-body">
+		<ul class="nav nav-tabs">
+			<li data-toggle="tab"class="active"><a href="#_general">
+				<i class="fa fa-certificate" aria-hidden="true"></i>
+				General
+			</a>
+			</li>
+			<li>
+			<a data-toggle="tab"  href="#_props">
+				<i class="fa fa-unlock-alt" aria-hidden="true"></i>
+				Propiedades
+			</a>
+			</li>
+			<li>
+				<a data-toggle="tab"  href="#_func">
+					<i class="fa fa-code" aria-hidden="true"></i>
+					Funciones
+				</a>
+			</li>
+			<li>
+			<a data-toggle="tab"  href="#_graph">
+				<i class="fa fa-line-chart" aria-hidden="true"></i>
+					Graficos
+				</a>
+			</li>
+		</ul>
+		
+		
+		<div class="tab-content">
+		<div id="_general" class="tab-pane fade in active">
+			<h3>HOME</h3>
+			<p>Some content.</p>
+		</div>
+		<div id="_props" class="tab-pane fade">
+			<h3>Menu 1</h3>
+			<p>Some content in menu 1.</p>
+		</div>
+		<div id="_func" class="tab-pane fade">
+			<h3>Menu 2</h3>
+			<p>Some content in menu 2.</p>
+		</div>
+		<div id="_graph" class="tab-pane fade">
+			<h3>Menu 2</h3>
+			<p>Some content in menu 3.</p>
+		</div>
+	   </div>
+		
+  </div>
+  <div class="modal-footer">
+    <button type="button" data-dismiss="modal" class="btn">Cancelar</button>
+    <button type="button" data-dismiss="modal" class="btn btn-primary">Guardar</button>
+  </div>
+  
+  </div>
+  </div>
+</div>
+
+<!-- MODAL DE ELIMINACION DEL OBJETO -->	
+<div id="scada-modal-delete" class="modal fade" role="dialog">
+ <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+		<div class="modal-header">
+		<h4 class="modal-title">Eliminar Objeto </h4>
+  </div>
+		<div class="modal-body">
+      <p>¿Seguro que desea eliminar {object} ?</p>
+  </div>
+		<div class="modal-footer">
+    <button type="button" data-dismiss="modal" class="btn">Cancelar</button>
+    <button id="delete-action-scada" type="button" data-dismiss="modal" class="btn btn-primary">Eliminar</button>
+  </div>
+	  </div>
+  </div>
+</div>
 	
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
@@ -442,7 +536,6 @@
 	
 	}
 	
-	
 	_FigureTemplate (){
 			return this.$$(go.Node, "Spot",
 						{ 
@@ -620,8 +713,6 @@
 
 	}
 	
-   
-
 	_PipeTemplate(){
 	
 	  function portFigure(pid) {
@@ -737,6 +828,7 @@
 							l.part.data.sid = $this._CreateOID(l.part.data.type , l.part.data.category ); //CREAMOS UN ID EN LAS LINES 
 						}
 						
+						
 						l.click = function(e,node){
 							console.log(node.part.data);
 							console.log(node.part.position);
@@ -757,8 +849,8 @@
 						l.mouseOver = function(e,node){
 		
 							$("#scada-show").css({
-								left 		:  node.part.position.x   + 40 ,
-								top  		:  (node.part.position.y  -  $("#frame").height()) - 45 ,
+								left 		:  node.part.position.x  + 75 ,
+								top  		:  node.part.position.y - 25, //(node.part.position.y  -  $("#frame").height()) - 25 ,
 								position 	: "relative",
 								'z-index'   : '100000000',
 								display 	: 'inline',
@@ -919,7 +1011,9 @@
 			//ciclo para los pipe o tuberias , efecto de agua corriendo 
 		    $this._PipeLoop(diagram , $this);
 			
-			
+			/*diagram.nodes.each(function(node){
+				console.log(node);
+			});*/
 			
 			
 			
@@ -929,6 +1023,16 @@
 	}
 	
 	
+	_FindNodeProperties(props , name ){
+		var result = null ;
+		$.each(props , function(a,b){ 
+			if(b.name == name ) 
+				result = b.value ;
+		});
+		
+		return result;
+	}
+	
 	_PipeLoop(diagram , $this ){
 	
 				try{
@@ -936,8 +1040,78 @@
 					var oldskips = diagram.skipsUndoManager;
 					diagram.skipsUndoManager = true;
 						
+					var count = 0;
 					diagram.links.each(function(link) {
 					
+						//console.log(link.fromNode.data);
+						//console.log(link.toNode.data);
+						
+						
+						
+						//console.log(link.Shape);
+						
+						//nuevo segmento de codigo condicion de los objetos 
+						
+					try{
+							let _from 		= link.fromNode.data;
+							let _to   		= link.toNode.data;
+							let isRest		= false ;
+					
+							var _mfrom = {
+								key : _from.key ,
+								rest: $this._FindNodeProperties(_from.properties , "restrict")
+							}; 
+						
+						
+							var _mto   = {
+								key 	: _to.key ,
+								rest 	: $this._FindNodeProperties(_to.properties , "restrict")
+							};
+						
+				
+							if(	_mfrom.rest.length 	!== 0 
+								&& _mto.rest.length !== 0) {
+						
+							
+							for(var i in _mfrom.rest){
+								if(String(_mfrom.rest[i]) == String(_mto.key) ){
+									isRest = true ;
+									break;
+								}
+								else if(String(_mfrom.rest[i]) == String(_from.key)){
+									isRest = true ;
+									break;
+								}
+							}
+							
+							if(!isRest)
+							for(var j in _to.rest){
+								if(String(_mto.rest[j]) == String(_mfrom.key)){
+									isRest = true ;
+									break;
+								}
+								else if(String(_mto.rest[j]) == String(_mto.key)){
+									isRest = true ;
+									break;
+								}
+							}
+							
+							if(isRest ){
+								console.log("aca entro");
+								link.findObject("P_A").stroke  = "#d9534f";
+								link.findObject("P_B").stroke  = "#d9534f";
+								link.findObject("PIPE").stroke  = "#d9534f";
+								//link.findObject("P_C").stroke  = "#FFCC00";
+								return;
+							}
+							
+						}
+					}catch(m){ }
+								
+						
+						//fin segmento 
+						
+						//console.log(count++ );
 						var d = link.part.data;	
 						var shape = link.findObject("PIPE");
 						var off  = 0;
@@ -949,13 +1123,19 @@
 								off = shape.strokeDashOffset - 2;
 								shape.strokeDashOffset = (off <= 0) ? 20 : off;
 							}
-							catch(k){}
+							catch(k){	
+								console.log("ERROR -> K PIPELOOP ");
+								console.log(k);
+							}
 						}
 						else {
 								try{
 									off = shape.strokeDashOffset + 2;
 									shape.strokeDashOffset = (off <= 0) ? 20 : off;
-								}catch(j){}
+								}catch(j){
+									console.log("ERROR -> J PIPELOOP ");
+									console.log(j);
+								}
 						}
 						
 					});
@@ -1195,10 +1375,10 @@
 				toShortLength: 0
 		},
         new go.Binding("points").makeTwoWay(),
-        this.$$(go.Shape, { isPanelMain: true, stroke: "blue", strokeWidth: 10 }),
-        this.$$(go.Shape, { isPanelMain: true, stroke: "blue", strokeWidth: 11 }),
-        this.$$(go.Shape, { isPanelMain: true, stroke: "white", strokeWidth: 8, name: "PIPE", strokeDashArray: [11, 11] }),
-        this.$$(go.Shape, {  isPanelMain: true , stroke : "blue", fill: "blue", stroke: null , strokeWidth: 8})
+        this.$$(go.Shape, { isPanelMain: true, stroke: "blue", name : "P_A" , strokeWidth: 10 }),
+        this.$$(go.Shape, { isPanelMain: true, stroke: "blue", name : "P_B" , strokeWidth: 11 }),
+        this.$$(go.Shape, { isPanelMain: true, stroke: "white",  strokeWidth: 8, name: "PIPE", strokeDashArray: [11, 11] }),
+        this.$$(go.Shape, {  isPanelMain: true , stroke : "blue" , name : "P_C" , fill: "blue", stroke: null , strokeWidth: 8})
       );
 	
 	
@@ -1387,6 +1567,7 @@ class Scada extends ScadaTools {
 		     {
 					text: "Tanque",
 					name : "Tank",
+					key : "_tank",
 					figure: "Cylinder1", 
 					fill:  scada.$$(go.Brush, "Linear",
 									{ 
@@ -1404,18 +1585,18 @@ class Scada extends ScadaTools {
 					category 			: 'SCADA_A',
 					sid 				: null, 
 					properties 			: [
-						{ name : "variable" ,   value : null , 		func : null  },
-						{ name : "position" ,   value : null   , 	func : null  },
+					
+						{ name : "variable" , alias : "Variables" ,   value : null , 		func : null  },
+						{ name : "position" , alias : "Posiciones" ,   value : [  { name : "X" , value : 0 } , { name : "Y" , value : 0 } ]    , 	func : null  },
 						{ name : "active" ,  	value : true  , 	func : null  },	
 					    { name : "styles" , 	value : [] , 		func : null},
 						{ name : "visible" ,    value : true  ,       func : null },
 						{ name : "graph" ,      value : { type : "linear" , data : {}  } , func : null },
-						{ personalize : {
-								max : 0,
-								min : 0,
-								type : "tank"
-						}}
+						{ name : "personalize" , value : { max : 0, min : 0,type : "tank" } , func : null },
+						{ name : "restrict" , alias : "Restricciones" , value : []  }
+						
 					]
+					
 			 },
 			 {
 				name 		: "GATO",
@@ -1442,6 +1623,7 @@ class Scada extends ScadaTools {
 						value: 0 , 
 						category:"SCADA_GAUGE_1",
 						figure : "flow_sensor",
+						key : "_flowsensor",
 						name : "Gauge",
 						properties : [],
 						styles : [],
@@ -1451,17 +1633,15 @@ class Scada extends ScadaTools {
 						width : 100 ,
 						height: 100,
 						properties 			: [
-						{ name : "variable" ,   value : null , 		func : null  },
-						{ name : "position" ,   value : null   , 	func : null  },
+						{ name : "variable" , alias : "Variables" ,   value : null , 		func : null  },
+						{ name : "position" , alias : "Posiciones" ,   value : [  { name : "X" , value : 0 } , { name : "Y" , value : 0 } ]    , 	func : null  },
 						{ name : "active" ,  	value : true  , 	func : null  },	
 					    { name : "styles" , 	value : [] , 		func : null},
 						{ name : "visible" ,    value : true  ,       func : null },
 						{ name : "graph" ,      value : { type : "linear" , data : {}  } , func : null },
-						{ personalize : {
-								max : 0,
-								min : 0,
-								type : "flow_sensor"
-						}},
+						{ name : "personalize" , value : { max : 0, min : 0,type : "flowsensor" } , func : null },
+						{ name : "restrict" , alias : "Restricciones" , value : [ "_manometer" , "_flowsensor" ]  }
+						
 					]
 				},
 				
@@ -1471,6 +1651,7 @@ class Scada extends ScadaTools {
 						value: 0 , 
 						category:"SCADA_GAUGE_2",
 						figure : "manom_sensor",
+						key : "_manometer",
 						name : "Gauge",
 						properties : [],
 						styles : [],
@@ -1479,19 +1660,17 @@ class Scada extends ScadaTools {
 						sid : null ,
 						width : 100 ,
 						height: 100,
-						properties 			: [
-						{ name : "variable" ,   value : null , 		func : null  },
-						{ name : "position" ,   value : null   , 	func : null  },
+						properties : [
+						{ name : "variable" , alias : "Variables" ,   value : null , 		func : null  },
+						{ name : "position" , alias : "Posiciones" ,   value : [  { name : "X" , value : 0 } , { name : "Y" , value : 0 } ]    , 	func : null  },
 						{ name : "active" ,  	value : true  , 	func : null  },	
 					    { name : "styles" , 	value : [] , 		func : null},
 						{ name : "visible" ,    value : true  ,       func : null },
 						{ name : "graph" ,      value : { type : "linear" , data : {}  } , func : null },
-						{ personalize : {
-								max : 0,
-								min : 0,
-								type : "flow_sensor"
-						}},
-					]
+						{ name : "personalize" , value : { max : 0, min : 0,type : "manometer" } , func : null },
+						{ name : "restrict" , alias : "Restricciones" , value :  ["_flowsensor" , "_manometer"] }
+						
+						]
 				}
 				
 		
