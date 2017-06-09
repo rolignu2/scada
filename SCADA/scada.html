@@ -13,16 +13,23 @@
 
 <!-- Optional theme -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
-
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+<link href="switch/css/bootstrap-switch.min.css" rel="stylesheet" >
 
 <script
   src="https://code.jquery.com/jquery-3.2.0.js"
   integrity="sha256-wPFJNIFlVY49B+CuAIrDr932XSb6Jk3J1M22M3E2ylQ="
   crossorigin="anonymous"></script> 
 
-  <script src="GuideLines.js"></script>
+
+<script src="GuideLines.js"></script>
+
+<link rel=stylesheet href="codemirror/lib/codemirror.css">
+<script src="codemirror/lib/codemirror.js"></script>
+<script src="codemirror/mode/xml/xml.js"></script>
+<script src="codemirror/mode/javascript/javascript.js"></script>
+<script src="codemirror/mode/htmlmixed/htmlmixed.js"></script>
+  
   
  <style>
  
@@ -278,7 +285,8 @@
   </div>
   <div class="modal-body">
 		<ul class="nav nav-tabs">
-			<li data-toggle="tab"class="active"><a href="#_general">
+			<li class="active">
+			<a data-toggle="tab"  href="#_general">
 				<i class="fa fa-certificate" aria-hidden="true"></i>
 				General
 			</a>
@@ -290,9 +298,15 @@
 			</a>
 			</li>
 			<li>
+			<a data-toggle="tab"  href="#_others">
+				<i class="fa fa-filter" aria-hidden="true"></i>
+				Otros 
+			</a>
+			</li>
+			<li>
 				<a data-toggle="tab"  href="#_func">
 					<i class="fa fa-code" aria-hidden="true"></i>
-					Funciones
+					Algoritmo 
 				</a>
 			</li>
 			<li>
@@ -305,20 +319,108 @@
 		
 		
 		<div class="tab-content">
+		
+		
 		<div id="_general" class="tab-pane fade in active">
-			<h3>HOME</h3>
-			<p>Some content.</p>
+		
+	
+			<form style="margin-top:20px;" class="form-horizontal">
+			
+			<div class="form-group"> 
+				<label for="" class="col-sm-2 control-label">ID</label>
+				<div class="col-sm-4"> 
+						<input disabled="disabled" type="text" class="form-control" id="obj_id" /> 
+				</div> 
+				
+				<label for="" class="col-sm-1 control-label">Key</label>
+				<div class="col-sm-5"> 
+						<input type="text" class="form-control" id="obj_key" /> 
+				</div> 
+			</div>
+			
+			<div class="form-group"> 
+				<label for="" class="col-sm-2 control-label">Nombre</label>
+				<div class="col-sm-10"> 
+						<input type="text" class="form-control" id="obj_name" /> 
+				</div> 
+			</div>
+			
+			<div class="form-group"> 
+				<label for="" class="col-sm-2 control-label">Categoria</label>
+				<div class="col-sm-4"> 
+						<input type="text" class="form-control" id="obj_cat" /> 
+				</div> 
+				
+				<label for="" class="col-sm-1 control-label">Activo</label>
+				<div class="col-sm-5"> 
+					<input id="obj_active" type="checkbox" checked="checked" />
+				</div> 
+			</div>
+	
+			
+			</form>
 		</div>
 		<div id="_props" class="tab-pane fade">
-			<h3>Menu 1</h3>
-			<p>Some content in menu 1.</p>
+			
+			<form style="margin-top:20px;" class="form-horizontal">
+			<div class="form-group"> 
+				<label for="" class="col-sm-2 control-label">PosX</label>
+				<div class="col-sm-4"> 
+						<input disabled="disabled" type="text" class="form-control" id="obj_x" /> 
+				</div> 
+				
+				<label for="" class="col-sm-1 control-label">PosY</label>
+				<div class="col-sm-4"> 
+						<input disabled="disabled" type="text" class="form-control" id="obj_y" /> 
+				</div> 
+			</div>
+			
+			<div class="form-group"> 
+				<label for="" class="col-sm-2 control-label">Texto</label>
+				<div class="col-sm-5"> 
+						<input  type="text" class="form-control" id="obj_text" /> 
+				</div> 
+				
+				<label for="" class="col-sm-1 control-label">Var</label>
+				<div class="col-sm-3"> 
+						<select class="form-control" id="obj_var" />
+							<option>...</option>
+						</select>
+				</div> 
+			</div>
+			
+			
+			<div class="form-group"> 
+				<label for="" class="col-sm-2 control-label">Descripcion</label>
+				<div class="col-sm-9"> 
+						<textarea  type="text" class="form-control" id="obj_description">
+						</textarea>						
+				</div> 
+			</div>
+			
+			
+			<div class="form-group"> 
+				<label for="" class="col-sm-2 control-label">Restricciones</label>
+				<div class="col-sm-9"> 
+						<input  type="text" class="form-control" id="obj_restrict" /> 
+						<small>Las restricciones es el "Key" del objeto separadas por comas (,)</small>
+				</div> 
+			</div> 
+		
+			
+			</form>
+			
+		</div>
+		<div id="_others" class="tab-pane fade">
+			<form id="_others_frm" style="margin-top:20px;" class="form-horizontal">
+			</form>
 		</div>
 		<div id="_func" class="tab-pane fade">
-			<h3>Menu 2</h3>
-			<p>Some content in menu 2.</p>
+			<form id="_func_frm" style="margin-top:20px;" class="form-horizontal">
+			</form>
 		</div>
 		<div id="_graph" class="tab-pane fade">
-			<h3>Menu 2</h3>
+			<h3>Menu 3</h3>
 			<p>Some content in menu 3.</p>
 		</div>
 	   </div>
@@ -353,12 +455,14 @@
 	
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
+<script src="switch/js/bootstrap-switch.min.js"></script>
 
 
 <script>
 
 	var $temp = null;
+	
+	$("#obj_active").bootstrapSwitch();
 
 	class ScadaError {
 	
@@ -580,9 +684,12 @@
 								margin: 8,
 								maxSize: new go.Size(160, NaN),
 								wrap: go.TextBlock.WrapFit,
-								editable: true
+								editable: true,
+								stroke : "black"
 						},
-						new go.Binding("text").makeTwoWay())
+						new go.Binding("text").makeTwoWay(),
+						new go.Binding("stroke")
+						)
 					),
 						this._makePort("T", go.Spot.Top, false, true  ),
 						this._makePort("L", go.Spot.Left, true, true),
@@ -776,7 +883,9 @@
 			
 			if($this.canvas.isModified){
 				button.prop("disabled" , false)
-				if(idx < 0) document.title += "*";
+				if(idx < 0){
+					document.title += "*";
+				}
 				else document.title = document.title.substr(0, idx);
 			}
 			else {
@@ -811,7 +920,7 @@
 					 }
 
 					 l.click = function(e,node){
-							console.log(node.part.data);
+							//console.log(node.part.data);
 							//let i = $this._CreateOID(node.part.data.type);
 							//$this._createModal($this._modalParams(node.part.data));
 					 };
@@ -829,10 +938,28 @@
 						}
 						
 						
+						console.log(l.part.data );
+						//disparador de funciones si tienen 
+						$.map(l.part.data.properties , (t)=>{
+						
+								
+								if(t.name == 'function'){
+								
+									
+									if(typeof t.value == 'function'){
+										console.log("CONSOLE -> INICIANDO FUNCION ... ");
+										t.value();
+									}
+										
+								}
+						
+						});
+						
+						
 						l.click = function(e,node){
-							console.log(node.part.data);
-							console.log(node.part.position);
-							console.log($("#scada-show").find("button"));
+							//console.log(node.part.data);
+							//console.log(node.part.position);
+							//console.log($("#scada-show").find("button"));
 							
 							//$("#scada-show").find("button").position.top = node.part.position.y;
 							
@@ -841,7 +968,7 @@
 						};
 						
 						l.contextClick = function(e, node ){ 
-							$this._createModal($this._modalParams(node.part.data));
+							$this._createModal($this._modalParams(node.part.data , node ));
 						};
 						
 						
@@ -861,7 +988,7 @@
 							//accion scada ver parametros 
 							$("#scada-show").find("a[id='scada-show-more']").click(function(){
 							
-								$this._createModal($this._modalParams(node.part.data));
+								$this._createModal($this._modalParams(node.part.data , node ));
 								
 								$("#scada-show").css({
 									display : 'none'
@@ -903,7 +1030,6 @@
 	_CreateOID(type = '' , cat = '' , max = 10 , iteration = 0  , r = '' ){
 	
 		//por medio de esta funcion recursiva podremos crear un ID unico por objeto 
-	
 		if(max > iteration){
 			 return  this._CreateOID(type , cat , max , (iteration+1) , (r + String(Math.floor(Math.random() * 10))));
 		}
@@ -922,28 +1048,205 @@
 
 	}
 	
-	_modalParams( data = null  ){
+	_createModal( $params = null ){
+	     
+		 //creamos el modal con los parametros necesarios 
+		 
+		 let p = "#obj_";
+		 var s = $("#scada-modal");
+		 
+		 
+		 //aca obtenemos el titulo
+		 s.find(".modal-header")
+		  .find(".modal-title")
+		  .text($params.name);
+		 
+
+		 //creamos el llenado de las propiedades del objeto a llamar
+		 $( p + "key").val($params.keys );
+		 
+		 
+		 //creamos un algoritmo de cambio en el title 
+		 $( p + "name").on("keyup" , function(){ 
+					s.find(".modal-header")
+					.find(".modal-title")
+					.text($(this).val());
+		 }).val($params.name);
+		 
+		 
+		 
+		 //id  --- 
+		 $( p + "id").val($params.id);
+		 
+		 // la categoria 
+		 $( p + "cat")
+				.val($params.category)
+				.prop("disabled" , true );
+		 
+		 
+		 
+		 //obtenemos la propiedad de estado activo 
+		 let a = $.map($params.props , (b)=> { 
+			 if(String(b.name) === "active")
+				return b.value ;
+		 });
+		 a = a[0]; //el valor es un array unidimensional 
+		 
+		 
+		 
+		 //verificamos el estado y lo cambiamos graficamente acorde al resultado 
+		 if(a ==  false  )
+			$( p + "active").bootstrapSwitch('state', false, false);
+		 else 
+			$( p + "active").bootstrapSwitch('state', true , true );
+		 
+		 //hasta aqui los aspectos basicos 
+		 
+		 //posisiones obj_x y obj_y
+		 
+		 $(p + "x" ).val($params.posx);
+		 $(p + "y" ).val($params.posy);
+		 
+		 //texto generico
+		 $(p + "text").val($params.text);
+		
+		 //Descripcion del sistema 
+		 let des = $.map($params.props , (b)=>{
+			 if(String(b.name) === "description")
+				return b.value ;
+		 })[0];
+		 
+		 $(p + "description").val(des);
+		 
+		 
+		 //restricciones de los objetos 
+		 
+		 let r = $.map($params.props , (b)=>{
+			 if(String(b.name) === "restrict")
+				return b.value ;
+		 });
+		 
+		$(p + "restrict").val(r.join(","));
+		
+		
+		//otras propiedades 
+		//preparando las otras propiedades ... 
+		let ot = "#_others_frm";  //donde estan 
+		let fu = "#_func_frm";   //funcion frame 
+		
+		var op = $(ot);		  //intancia del puntero
+		var fo = $(fu); 
+		op.html("");		 // limpieza
+		fo.html("");
+		
+		let inpt = $("<input class='' type='text' id='' value='' />");
+		let bdy  = $('<div class="form-group"></div>');
+		let lbl  = $('<label for="" class="col-sm-2 control-label"></label>');
+		let div  = $('<div class="col-sm-9"></div>');
+		
+		//analizar los parametros cuyo system sea falso 
+		$.map($params.props , (c)=>{
+			  if(c.system == true){
+				 return false;
+			  }
+			  
+			  
+			 let area = $("<textarea id='_function_code' name='_function_code' rows='25' cols='60' class='form-control' type='text' id='' value='' ></textarea>");
+			 let inpt = $("<input class='form-control' type='text' id='' value='' />");
+			 let bdy  = $('<div class="form-group"></div>');
+			 let lbl  = $('<label for="" class="col-sm-2 control-label"></label>');
+			 let div  = $('<div class="col-sm-9"></div>');
+			 
+			  
+			  lbl.html(c.alias);
+			 
+			  switch(c.control){
+					case "select":
+							break;
+					case "input":
+					case "":
+							
+							switch(typeof c.value){
+								case "string": 
+									inpt.val(c.value);
+								case "array" :
+									inpt.val(Array(c.value).join(","));
+								case "object":
+									inpt.val(JSON.stringify(c.value));
+								
+							}
+							div.append(inpt);
+							bdy.append(lbl);
+							bdy.append(div);
+							op.append(bdy);
+							break;
+					case "graph":
+							break;
+					case "input-code":
+							let st 	= "";
+							let uni = st + c.value ;
+							area.val(uni);
+							div.removeClass("col-sm-9");
+							div.addClass("col-md-12");
+							div.append(area);
+							bdy.append(div);
+							fo.append(bdy);
+							
+							break;
+			  }
+			  
+			  
+			
+			  
+		});
+		
+		try{
+			CodeMirror.fromTextArea(document.getElementById("_function_code"), {
+									lineNumbers: false,
+									mode: "text/javascript",
+									matchBrackets: true ,
+									smartIndent: true ,
+									//autofocus : true ,
+									dragDrop : true 
+							});
+		}catch(kk){}
+		
+		 s.modal();
+	}
 	
+	
+	_modalParams( data = null , node = null   ){
+	
+		   let x = 0 , y = 0;
+		   
+		   if(node !== null){
+				x = node.position.x;
+				y = node.position.y;
+		   }
+		   
 		   let _p = {
 		   
 				text 		: data.text ? data.text : null ,
 				name 		: data.name ? data.name : '' ,
+				category    : data.category ? data.category : null ,
 				figure 		: data.figure ? data.figure : null ,
 				func 		: data.func ? data.func : null ,
 				id  		: data.sid ? data.sid : null ,
 				type 		: data.type ? data.type : null ,
-				state 		: data.state ? data.state : null 
+				state 		: data.state ? data.state : null ,
+				keys 		: data.keys ? data.keys : null,
+				props 		: data.properties ? data.properties : null ,
+				posx 		: x ,
+				posy 		: y 
 		   };
-		   
-		   console.log("Console : -> modalParams : \n {Start} ");
-		   console.log(_p);
-		   console.log("{End}");
 		   
 		   return _p;
 			
 	}
 	
 	_deleteModal(node){
+	
+		 //hace accion al modal de eliminacion de objeto 
 		 
 		 let s = $("#scada-modal-delete");
 		 let r = s.find(".modal-body").find("p");
@@ -970,30 +1273,9 @@
 		this.canvas.remove(part);
 	}
 	
-	_createModal( $params = null ){
-	     
-		 //creamos el modal con los parametros necesarios 
-		 
-		 let s = $("#scada-modal");
-		 
-		 s.find(".modal-header")
-		  .find(".modal-title")
-		  .text($params.name);
-		
-		 s.modal();
-	}
-	
+
 	_nodeClick(e, node ){
-	
-		this._createModal(this._modalParams(node.part.data));
-	    //nodo en modo onclick 
-		/*var n = node.part ;
-		 var diagram = n.diagram;
-		console.log(diagram); 
-		console.log(diagram.model.getCategoryForNodeData(n.data)); //obtenemos la categoria 
-		console.log(n.data); //obtenemos la data del nodo 
-		n.data.text = "tanquesito";*/
-	
+		this._createModal(this._modalParams(node.part.data , node));
 	}
 	
 	
@@ -1010,12 +1292,6 @@
 		
 			//ciclo para los pipe o tuberias , efecto de agua corriendo 
 		    $this._PipeLoop(diagram , $this);
-			
-			/*diagram.nodes.each(function(node){
-				console.log(node);
-			});*/
-			
-			
 			
 		    $this._loop();
 		}, 200);
@@ -1042,29 +1318,25 @@
 						
 					var count = 0;
 					diagram.links.each(function(link) {
+	
+					//nuevo segmento de codigo condicion de los objetos 
 					
-						//console.log(link.fromNode.data);
-						//console.log(link.toNode.data);
-						
-						
-						
-						//console.log(link.Shape);
-						
-						//nuevo segmento de codigo condicion de los objetos 
-						
+					var d = link.part.data;	
+					
 					try{
+					
 							let _from 		= link.fromNode.data;
 							let _to   		= link.toNode.data;
 							let isRest		= false ;
 					
 							var _mfrom = {
-								key : _from.key ,
+								keys  : _from.keys  ,
 								rest: $this._FindNodeProperties(_from.properties , "restrict")
 							}; 
 						
 						
 							var _mto   = {
-								key 	: _to.key ,
+								keys  	: _to.keys  ,
 								rest 	: $this._FindNodeProperties(_to.properties , "restrict")
 							};
 						
@@ -1074,11 +1346,11 @@
 						
 							
 							for(var i in _mfrom.rest){
-								if(String(_mfrom.rest[i]) == String(_mto.key) ){
+								if(String(_mfrom.rest[i]) == String(_mto.keys ) ){
 									isRest = true ;
 									break;
 								}
-								else if(String(_mfrom.rest[i]) == String(_from.key)){
+								else if(String(_mfrom.rest[i]) == String(_from.keys )){
 									isRest = true ;
 									break;
 								}
@@ -1086,18 +1358,17 @@
 							
 							if(!isRest)
 							for(var j in _to.rest){
-								if(String(_mto.rest[j]) == String(_mfrom.key)){
+								if(String(_mto.rest[j]) == String(_mfrom.keys )){
 									isRest = true ;
 									break;
 								}
-								else if(String(_mto.rest[j]) == String(_mto.key)){
+								else if(String(_mto.rest[j]) == String(_mto.keys )){
 									isRest = true ;
 									break;
 								}
 							}
 							
 							if(isRest ){
-								console.log("aca entro");
 								link.findObject("P_A").stroke  = "#d9534f";
 								link.findObject("P_B").stroke  = "#d9534f";
 								link.findObject("PIPE").stroke  = "#d9534f";
@@ -1111,10 +1382,10 @@
 						
 						//fin segmento 
 						
-						//console.log(count++ );
-						var d = link.part.data;	
+						
 						var shape = link.findObject("PIPE");
 						var off  = 0;
+						
 						
 						if(d.active != true ) return false;
 						
@@ -1142,7 +1413,6 @@
 				
 				}
 				catch(e){
-				
 				}
 			
 			diagram.skipsUndoManager = oldskips;
@@ -1565,20 +1835,30 @@ class Scada extends ScadaTools {
 		let items = [
 		
 		     {
-					text: "Tanque",
+					text: "Tanque 0%",
 					name : "Tank",
-					key : "_tank",
+					keys : "_tank",
 					figure: "Cylinder1", 
+				    stroke : "black",
 					fill:  scada.$$(go.Brush, "Linear",
 									{ 
-										start: go.Spot.Left, 
-										end: go.Spot.Right,
-									    0: "gray", 
-										0.5: "white", 
-										1: "gray" 
+										start: go.Spot.Bottom , 
+										end: go.Spot.Top,
+									    0		: "blue", 
+										0.05 	: "white",
+										0.1 	: "white ",
+										0.2 	: "white",
+										0.3     : "white" ,
+										0.4 	: "white",
+										0.5		: "white",
+										0.6     : "white",
+										0.7     : "white",
+										0.8     : "white",
+										0.9     : "white",
+										1		: "white" 
 									}
 							),
-					minSize				: new go.Size(50, 50),
+					minSize				: new go.Size(100, 100),
 					fromSpot			: go.Spot.AllSides, 
 					toSpot				: go.Spot.AllSides,
 					desiredSize 		: new go.Size(35, 35),
@@ -1586,18 +1866,74 @@ class Scada extends ScadaTools {
 					sid 				: null, 
 					properties 			: [
 					
-						{ name : "variable" , alias : "Variables" ,   value : null , 		func : null  },
-						{ name : "position" , alias : "Posiciones" ,   value : [  { name : "X" , value : 0 } , { name : "Y" , value : 0 } ]    , 	func : null  },
-						{ name : "active" ,  	value : true  , 	func : null  },	
-					    { name : "styles" , 	value : [] , 		func : null},
-						{ name : "visible" ,    value : true  ,       func : null },
-						{ name : "graph" ,      value : { type : "linear" , data : {}  } , func : null },
-						{ name : "personalize" , value : { max : 0, min : 0,type : "tank" } , func : null },
-						{ name : "restrict" , alias : "Restricciones" , value : []  }
+						{ name : "variable" 	, alias : "Variables" ,  value : null , func : null , control : "" , system : true    },
+						{ name : "active"  , alias : "Activo", value : false , 	func : null  , control : "" , system : true   },	
+					    { name : "styles" 		, value : [] ,  func : null , control : "select" , system : false },
+						{ name : "graph" 		, value : { type : "linear" , data : {}  } , func : null , control : "graph" , system : false  },
+						{ name : "personalize" 	, value : { max : 0, min : 0, percent:0 ,  type : "tank" } , func : null , control : "input" , system : false  },
+						{ name : "restrict" 	, alias : "Restricciones" , value :  [] , control : "input" , system : false },
+						{ name : "description" , alias : "Descripcion" , value : "..." , control : "" , system : true },
+						{ name : "function" , alias : "Funcion" , value : function(){
+						
+								var $this = scada;
+								var it = 0 ; 
+								
+								/***
+								   este algoritmo es un ejemplo de como se podria llenar el 
+								   tanque a base de calculos matematicos basicos 
+								****/
+								
+								setInterval(function(){
+								
+									$this.canvas.startTransaction(); 
+									
+									$this.canvas.nodes.each(function(node){
+									
+										if(node.part.data.keys !== '_tank') return ;
+										
+										if(it > 19 ) it = 0 ;
+										
+										let build = {
+											start: go.Spot.Bottom ,
+											end: go.Spot.Top
+										};
+										
+										for(var i = 0 ; i < 19 ; i++ ){
+											
+											if(i < it){
+												build[String(i/20)] = "blue";
+											}
+											else build[String(i/20)] = "white";
+											
+										}
+										it++;
+										let fill  	= $this.$$(go.Brush, "Linear", build );
+										let percent	= Math.round((it/20) * 100) ;
+										
+										
+										if(percent >= 60){
+											$this.canvas.model.setDataProperty(node.data, "stroke", "white" );
+										}
+										else {
+											$this.canvas.model.setDataProperty(node.data, "stroke", "black" );
+										}
+										
+										$this.canvas.model.setDataProperty(node.data, "text", "Tanque " +  percent + "%" );
+										$this.canvas.model.setDataProperty(node.data, "fill", fill);
+									
+									});
+									
+									
+									$this.canvas.commitTransaction("Iniciando modificacion ...");
+								
+								
+								} , 2000);
+						
+						} , control : "input-code" , system : false }
 						
 					]
 					
-			 },
+			 }/*,
 			 {
 				name 		: "GATO",
 				key 		: "gato",
@@ -1609,7 +1945,7 @@ class Scada extends ScadaTools {
 				func 		: null ,
 				category 	: "SCADA_B",
 				text 		: ''
-			 }
+			 }*/
 			 
 			 
 		];
@@ -1623,7 +1959,7 @@ class Scada extends ScadaTools {
 						value: 0 , 
 						category:"SCADA_GAUGE_1",
 						figure : "flow_sensor",
-						key : "_flowsensor",
+						keys : "_flowsensor",
 						name : "Gauge",
 						properties : [],
 						styles : [],
@@ -1633,15 +1969,59 @@ class Scada extends ScadaTools {
 						width : 100 ,
 						height: 100,
 						properties 			: [
-						{ name : "variable" , alias : "Variables" ,   value : null , 		func : null  },
-						{ name : "position" , alias : "Posiciones" ,   value : [  { name : "X" , value : 0 } , { name : "Y" , value : 0 } ]    , 	func : null  },
-						{ name : "active" ,  	value : true  , 	func : null  },	
-					    { name : "styles" , 	value : [] , 		func : null},
-						{ name : "visible" ,    value : true  ,       func : null },
-						{ name : "graph" ,      value : { type : "linear" , data : {}  } , func : null },
-						{ name : "personalize" , value : { max : 0, min : 0,type : "flowsensor" } , func : null },
-						{ name : "restrict" , alias : "Restricciones" , value : [ "_manometer" , "_flowsensor" ]  }
+						{ name : "variable" 	, alias : "Variables" ,  value : null , func : null , control : "" , system : true    },
+						{ name : "active"  , alias : "Activo", value : true , 	func : null  , control : "" , system : true   },	
+					    { name : "styles" 		, value : [] ,  func : null , control : "select" , system : false },
+						{ name : "graph" 		, value : { type : "linear" , data : {}  } , func : null , control : "graph" , system : false  },
+						{ name : "personalize" , alias : "Control" 	, value : { max : 0, min : 0,type : "flujometer" } , func : null , control : "input" , system : false  },
+						{ name : "restrict" 	, alias : "Restricciones" , value :  [ "_manometer" , "_flowsensor" ] , control : "input" , system : true },
+						{ name : "description" , alias : "Descripcion" , value : "..." , control : "" , system : true },
+						{ name : "function" , alias : "Funcion" , value : function(){
+							
+								 var $this = scada;
+								 setInterval(function() {
+								 
+									
+									$this.canvas.startTransaction();  	// aplicamos la transferencia al canvas
+									
+									//analizamos los nodos 
+									$this.canvas.nodes.each(function(node) {
+									
 						
+									//verificamos que el noso a generar sea sensor de flujo 
+									if(node.part.data.keys  !== "_flowsensor") return ;
+									
+
+									//buscamos el objeto de escala en cual generara 
+									var scale = node.findObject("SCALE");
+									
+									
+									//si la escala es nulla detener todo 
+									if (scale === null || scale.type !== go.Panel.Graduated) return;
+									
+									//generamos el min y el max 
+									var min = scale.graduatedMin;
+									var max = scale.graduatedMax;
+									
+									//creamos un valor basados en min y max 
+									var v = node.data.value || Math.floor((max - min) / 2);
+									
+									//condicionales 
+									if (v < min) v++;
+									else if (v > max) v--;
+									else v += (Math.random() < 0.5) ? -0.5 : 0.5; 
+									
+									//enviamos el valor 
+									$this.canvas.model.setDataProperty(node.data, "value", v);
+									
+								});
+								
+								//hacemos commit a la transaccion :)
+								$this.canvas.commitTransaction("Iniciando modificacion ...");
+							}, 5000/6);
+							
+							
+						} , control : "input-code" , system : false }
 					]
 				},
 				
@@ -1651,7 +2031,7 @@ class Scada extends ScadaTools {
 						value: 0 , 
 						category:"SCADA_GAUGE_2",
 						figure : "manom_sensor",
-						key : "_manometer",
+						keys  : "_manometer",
 						name : "Gauge",
 						properties : [],
 						styles : [],
@@ -1661,14 +2041,59 @@ class Scada extends ScadaTools {
 						width : 100 ,
 						height: 100,
 						properties : [
-						{ name : "variable" , alias : "Variables" ,   value : null , 		func : null  },
-						{ name : "position" , alias : "Posiciones" ,   value : [  { name : "X" , value : 0 } , { name : "Y" , value : 0 } ]    , 	func : null  },
-						{ name : "active" ,  	value : true  , 	func : null  },	
-					    { name : "styles" , 	value : [] , 		func : null},
-						{ name : "visible" ,    value : true  ,       func : null },
-						{ name : "graph" ,      value : { type : "linear" , data : {}  } , func : null },
-						{ name : "personalize" , value : { max : 0, min : 0,type : "manometer" } , func : null },
-						{ name : "restrict" , alias : "Restricciones" , value :  ["_flowsensor" , "_manometer"] }
+						{ name : "variable" 	, alias : "Variables" ,  value : null , func : null , control : "" , system : true    },
+						{ name : "active" 		, alias : "Activo"	, value : true, 	func : null  , control : "" , system : true   },	
+					    { name : "styles" 		, value : [] ,  func : null , control : "" , system : true  },
+						{ name : "graph" 		, value : { type : "linear" , data : {}  } , func : null , control : "graph" , system : false  },
+						{ name : "personalize"  , alias : "Control"	, value : { max : 0, min : 0,type : "manometer" } , func : null , control : "input" , system : false  },
+						{ name : "restrict" 	, alias : "Restricciones" , value :  ["_flowsensor" , "_manometer"] , control : "" , system : false },
+						{ name : "description"  , alias : "Descripcion" , value : "..." , control : "" , system : true },
+						{ name : "function" , alias : "Funcion" , value : function(){
+							
+								 var $this = scada;
+								 setInterval(function() {
+								 
+									
+									$this.canvas.startTransaction();  	// aplicamos la transferencia al canvas
+									
+									//analizamos los nodos 
+									$this.canvas.nodes.each(function(node) {
+									
+						
+									//verificamos que el noso a generar sea sensor de flujo 
+									if(node.part.data.keys  !== "_manometer") return ;
+									
+
+									//buscamos el objeto de escala en cual generara 
+									var scale = node.findObject("SCALE");
+									
+									
+									//si la escala es nulla detener todo 
+									if (scale === null || scale.type !== go.Panel.Graduated) return;
+									
+									//generamos el min y el max 
+									var min = scale.graduatedMin;
+									var max = scale.graduatedMax;
+									
+									//creamos un valor basados en min y max 
+									var v = node.data.value || Math.floor((max - min) / 2);
+									
+									//condicionales 
+									if (v < min) v++;
+									else if (v > max) v--;
+									else v += (Math.random() < 0.5) ? -0.5 : 0.5; 
+									
+									//enviamos el valor 
+									$this.canvas.model.setDataProperty(node.data, "value", v);
+									
+								});
+								
+								//hacemos commit a la transaccion :)
+								$this.canvas.commitTransaction("Iniciando modificacion ...");
+							}, 5000/6);
+							
+							
+						} , control : "input-code" , system : false }
 						
 						]
 				}
@@ -1690,3 +2115,6 @@ class Scada extends ScadaTools {
 
 </body>
 </html>
+
+
+
