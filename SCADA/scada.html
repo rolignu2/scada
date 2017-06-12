@@ -2281,7 +2281,42 @@ class Scada extends ScadaTools {
 						
 						} , control : "input-code" , system : false }
 				]
-			 }
+			 },
+			 
+			 {
+					text: "Agrega un texto",
+					name : "textbloc",
+					keys : "_textbloc",
+					figure: "Rectangle", 
+				    stroke : "white" ,
+					fill:  scada.$$(go.Brush, "Linear",
+									{ 
+										start: go.Spot.Bottom , 
+										end: go.Spot.Top,
+									    1		: "black"
+										
+									}
+							),
+					minSize				: new go.Size(100, 100),
+					fromSpot			: go.Spot.AllSides, 
+					toSpot				: go.Spot.AllSides,
+					desiredSize 		: new go.Size(35, 35),
+					category 			: 'SCADA_A',
+					sid 				: null, 
+					properties 			: [
+					
+						{ name : "variable" 	, alias : "Variables" ,  value : null , func : null , control : "" , system : true    },
+						{ name : "active"  , alias : "Activo", value : false , 	func : null  , control : "" , system : true   },	
+					    { name : "styles" 		, value : [] ,  func : null , control : "select" , system : false },
+						{ name : "graph" 		, value : { type : "linear" , data : {}  } , func : null , control : "graph" , system : false  },
+						{ name : "personalize" 	, value : { max : 0, min : 0, percent:0 ,  type : "tank" } , func : null , control : "input" , system : false  },
+						{ name : "restrict" 	, alias : "Restricciones" , value :  [] , control : "input" , system : false },
+						{ name : "description" , alias : "Descripcion" , value : "..." , control : "" , system : true },
+						{ name : "function" , backup : ""  , alias : "Funcion" , value : function(){} , control : "input-code" , system : false }
+						
+					]
+					
+			 },
 				
 		
 		];
