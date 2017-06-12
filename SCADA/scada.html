@@ -229,7 +229,7 @@
 	<ul id="nav">
 		<li><a href="#">Archivo</a>
 			<ul>
-				<li><a href="#" onclick="">Guardar</a></li>
+				<li><a id="save_scada" href="#" onclick="">Guardar</a></li>
 				<li><a href="#" onclick="">Eliminar Proyecto</a></li>
 			</ul>
 		</li>
@@ -428,7 +428,7 @@
   </div>
   <div class="modal-footer">
     <button type="button" data-dismiss="modal" class="btn">Cancelar</button>
-    <button type="button" data-dismiss="modal" class="btn btn-primary">Guardar</button>
+    <button id="save_modal_data" type="button" data-dismiss="modal" class="btn btn-primary">Guardar</button>
   </div>
   
   </div>
@@ -461,7 +461,6 @@
 <script>
 
 	var $temp = null;
-	
 	$("#obj_active").bootstrapSwitch();
 
 	class ScadaError {
@@ -586,6 +585,7 @@
 			
 	
 			this._linkTemplate();  //carga las plantillas 
+			//this._tackTemplate();
 			this._load(); 		   //carga multiple  
 			this._loop();		  //cargar loops 
 			this._controlBar();   //cargar el area de controladores 
@@ -614,11 +614,11 @@
 								go.Size.parse
 						).makeTwoWay(go.Size.stringify),
 						this.$$(go.TextBlock, 
-								new go.Binding("text", "key")
+								new go.Binding("text", "text")
 						),
 						this.$$(go.Picture, 
 							{ 
-								desiredSize: new go.Size(75, 50) 
+								desiredSize: new go.Size(180, 150) 
 							},
 							new go.Binding("source", "src", 
 							function(s) 
@@ -825,11 +825,13 @@
 	  function portFigure(pid) {
 	  
 	  
-		if (pid === null || pid === "") return "XLine";
-		if (pid[0] === 'F') return "CircleLine";
-		if (pid[0] === 'M') return "PlusLine";
-		return "XLine";  
+			if (pid === null || pid === "") return "XLine";
+			if (pid[0] === 'F') return "CircleLine";
+			if (pid[0] === 'M') return "PlusLine";
+			return "XLine";  
+		
 		}
+		
 		
 		return this.$$(go.Node, "Spot",
         {
@@ -912,6 +914,8 @@
 				let o = c.skipsUndoManager;
 				
 				
+				
+				
 				/**SOLUCION PARA EL SISTEMA DE LINEAS DEL OBJETO **/
 				c.links.each(function(l){
 				
@@ -919,11 +923,11 @@
 						l.part.data.sid = $this._CreateOID(l.part.data.type); //CREAMOS UN ID EN LAS LINES 
 					 }
 
-					 l.click = function(e,node){
+					/* l.click = function(e,node){
 							//console.log(node.part.data);
 							//let i = $this._CreateOID(node.part.data.type);
 							//$this._createModal($this._modalParams(node.part.data));
-					 };
+					 };*/
 					 
 				});
 				/***FIN DE LA SOLUCION DE LINEAS DE CANVAS ***/
@@ -946,9 +950,14 @@
 								if(t.name == 'function'){
 								
 									
-									if(typeof t.value == 'function'){
-										console.log("CONSOLE -> INICIANDO FUNCION ... ");
+									if(typeof t.value == 'function' ){
+										//console.log("CONSOLE -> INICIANDO FUNCION ... ");
 										t.value();
+									    t.backup = String(t.value);
+									   
+									}
+									else if(t.value == 'function'){
+										console.log("Entrada a esta parte del codigo");
 									}
 										
 								}
@@ -1175,6 +1184,7 @@
 									inpt.val(JSON.stringify(c.value));
 								
 							}
+							inpt.attr("id" , "obj_" + c.name  );
 							div.append(inpt);
 							bdy.append(lbl);
 							bdy.append(div);
@@ -1201,7 +1211,8 @@
 		});
 		
 		try{
-			CodeMirror.fromTextArea(document.getElementById("_function_code"), {
+			
+			this.cm = CodeMirror.fromTextArea(document.getElementById("_function_code"), {
 									lineNumbers: false,
 									mode: "text/javascript",
 									matchBrackets: true ,
@@ -1213,7 +1224,6 @@
 		
 		 s.modal();
 	}
-	
 	
 	_modalParams( data = null , node = null   ){
 	
@@ -1273,7 +1283,6 @@
 		this.canvas.remove(part);
 	}
 	
-
 	_nodeClick(e, node ){
 		this._createModal(this._modalParams(node.part.data , node));
 	}
@@ -1308,6 +1317,8 @@
 		
 		return result;
 	}
+	
+	
 	
 	_PipeLoop(diagram , $this ){
 	
@@ -1556,14 +1567,41 @@
 		  
 		 //PARA CONTROL BAR ESTAS LINEAS DE CODIGO SON LAS BUENAS AHI XD 
 		 var line = [
-				{
+					{
+						keys : "_pipeline",
 						points: new go.List(go.Point).addAll(
 													[	new go.Point(0, 0), 
 														new go.Point(30, 0), 
 														new go.Point(30, 40), 
 														new go.Point(60, 40)
 													]),
+						stroke3 : "blue",
+						name3   :"PIPE",
 						type : "line",
+						width3 : 15,
+						stroke4 : "blue",
+						width4 : 10,
+						active : true  ,
+						rollback : false ,
+						func : null , 
+						sid  : null
+					
+					},
+				
+					{
+						keys : "_cloudline",
+						points: new go.List(go.Point).addAll(
+													[	new go.Point(0, 0), 
+														new go.Point(0, 0), 
+														new go.Point(60, 60), 
+														new go.Point(60, 60)
+													]),
+						stroke3 : "yellow",
+						name3   :"_connline",
+						type : "line",
+						width3 : 13,
+						stroke4 : "black",
+						width4 : 5,
 						active : true  ,
 						rollback : false ,
 						func : null , 
@@ -1571,8 +1609,10 @@
 					
 				}
 			
+			
           ];
 		  
+	
 
 		  if(this.controlData === null ){
 					this.ObjectError("Error al momento de cargar los items u objetos" , "Load error ");
@@ -1581,8 +1621,7 @@
 				
 
 		 this.control.model = new go.GraphLinksModel(
-			this.controlData,
-			line
+			this.controlData
 		 );
 		 
 		 
@@ -1600,7 +1639,7 @@
 		
 		//veriricando la data del control 2 
 		if(this.controlData2 !== null )
-				this.controlPipe.model = new go.GraphLinksModel(this.controlData2);
+				this.controlPipe.model = new go.GraphLinksModel(this.controlData2 , line);
 		
 		//FIN DE LAS LINEAS DE LOS PIPES 
 
@@ -1644,15 +1683,36 @@
 				reshapable: true, 
 				toShortLength: 0
 		},
+		
+		
         new go.Binding("points").makeTwoWay(),
-        this.$$(go.Shape, { isPanelMain: true, stroke: "blue", name : "P_A" , strokeWidth: 10 }),
-        this.$$(go.Shape, { isPanelMain: true, stroke: "blue", name : "P_B" , strokeWidth: 11 }),
-        this.$$(go.Shape, { isPanelMain: true, stroke: "white",  strokeWidth: 8, name: "PIPE", strokeDashArray: [11, 11] }),
-        this.$$(go.Shape, {  isPanelMain: true , stroke : "blue" , name : "P_C" , fill: "blue", stroke: null , strokeWidth: 8})
-      );
+        this.$$(go.Shape, { isPanelMain: true, stroke: "white", name : "P_A" , strokeWidth: 10 }),
+        this.$$(go.Shape, { isPanelMain: true, stroke: "white", name : "P_B" , strokeWidth: 10 }),
+        this.$$(go.Shape, 
+						new go.Binding("stroke" , "stroke3"),  
+						new go.Binding("name" , "name3"),
+						new go.Binding("strokeWidth" , "width3"),
+						{ 
+								isPanelMain: true, 
+								strokeDashArray: [11, 11] 
+						}),
+        this.$$(go.Shape, 
+					new go.Binding("stroke" , "stroke4"),  
+					new go.Binding("strokeWidth" , "width4"),
+					{  
+						isPanelMain: true , 
+						name : "P_C" ,
+						fill: "blue"
+					})
+      
+	  
+	  );
+	  
+
 	
 	
 	}
+	
 	
 	
 	_load() {
@@ -1794,6 +1854,79 @@ class Scada extends ScadaTools {
 				console.log($this.modelData);
 			});
 			
+			
+			
+			$("#save_modal_data").click(function(){
+			
+			
+				console.log("Guardando nueva configuracion");
+				let id = $("#obj_id").val();
+				
+				
+				$this.canvas.startTransaction(); 
+				$this.canvas.nodes.each(function(node){
+				
+					let d = node.part.data;
+					
+					if(String(d.sid) !== String(id))
+						return;
+					
+					d.keys 		= $("#obj_key").val();
+					d.name 		= $("#obj_name").val();
+					$this.canvas.model.setDataProperty(node.data, "text", $("#obj_text").val() );
+					
+					$.map(d.properties , (a)=>{
+						
+						switch(a.name){
+						
+							case "description":
+								a.value = $("#obj_description").val();
+								break;
+							case "restrict":
+								a.value = $("#obj_restrict").val();
+								break;
+							case "variable":
+								a.value = $("#obj_var").val();
+								break;
+							case "function":
+								let f = $this.cm.getDoc().getValue();
+								a.value 	= eval( '(' + f + ')' );
+								a.backup	= f;
+								//a.value();
+								break;
+							case "graph":
+								break;
+							default : 
+								if(a.system == false ){
+									switch(a.control){
+											case "input":
+											case "select":
+												let m = $("#obj_" + a.name ).val();
+												try{
+													a.value = JSON.parse(m);
+												}
+												catch(h){
+													a.value = String(m);
+												}
+												break;
+									}
+								}
+								break;
+						
+						
+						}
+					
+					});
+					
+				});
+				
+				$this.canvas.commitTransaction("Iniciando modificacion ...");
+				
+				
+				alert("Si se modifico una funcion debera volver a refrescar la pagina \n , para eliminar la funcion vieja y ejecutar el cambio . ");
+				
+			});
+			
 		}
 
 		 
@@ -1873,7 +2006,7 @@ class Scada extends ScadaTools {
 						{ name : "personalize" 	, value : { max : 0, min : 0, percent:0 ,  type : "tank" } , func : null , control : "input" , system : false  },
 						{ name : "restrict" 	, alias : "Restricciones" , value :  [] , control : "input" , system : false },
 						{ name : "description" , alias : "Descripcion" , value : "..." , control : "" , system : true },
-						{ name : "function" , alias : "Funcion" , value : function(){
+						{ name : "function" , backup : ""  , alias : "Funcion" , value : function(){
 						
 								var $this = scada;
 								var it = 0 ; 
@@ -1933,38 +2066,15 @@ class Scada extends ScadaTools {
 						
 					]
 					
-			 }/*,
-			 {
-				name 		: "GATO",
-				key 		: "gato",
-				src 		: "50x40",
-				state 		: {
-						active : true 
-				},
-				sid 		: null ,
-				func 		: null ,
-				category 	: "SCADA_B",
-				text 		: ''
-			 }*/
+			 },
 			 
-			 
-		];
-		
-		
-		let items2 = [
-		
-            
-			 {  
+			  {  
 						text: "Flujometro", 
 						value: 0 , 
 						category:"SCADA_GAUGE_1",
 						figure : "flow_sensor",
 						keys : "_flowsensor",
 						name : "Gauge",
-						properties : [],
-						styles : [],
-					    func : null,
-					    state : { active : true } , 
 						sid : null ,
 						width : 100 ,
 						height: 100,
@@ -1976,7 +2086,7 @@ class Scada extends ScadaTools {
 						{ name : "personalize" , alias : "Control" 	, value : { max : 0, min : 0,type : "flujometer" } , func : null , control : "input" , system : false  },
 						{ name : "restrict" 	, alias : "Restricciones" , value :  [ "_manometer" , "_flowsensor" ] , control : "input" , system : true },
 						{ name : "description" , alias : "Descripcion" , value : "..." , control : "" , system : true },
-						{ name : "function" , alias : "Funcion" , value : function(){
+						{ name : "function" , backup : ""  , alias : "Funcion" , value : function(){
 							
 								 var $this = scada;
 								 setInterval(function() {
@@ -2048,7 +2158,7 @@ class Scada extends ScadaTools {
 						{ name : "personalize"  , alias : "Control"	, value : { max : 0, min : 0,type : "manometer" } , func : null , control : "input" , system : false  },
 						{ name : "restrict" 	, alias : "Restricciones" , value :  ["_flowsensor" , "_manometer"] , control : "" , system : false },
 						{ name : "description"  , alias : "Descripcion" , value : "..." , control : "" , system : true },
-						{ name : "function" , alias : "Funcion" , value : function(){
+						{ name : "function" , backup : "" , alias : "Funcion" , value : function(){
 							
 								 var $this = scada;
 								 setInterval(function() {
@@ -2097,6 +2207,81 @@ class Scada extends ScadaTools {
 						
 						]
 				}
+				
+			
+			
+			 
+			 
+		];
+		
+		
+		let items2 = [
+		
+			 {
+				name 		: "Photon",
+				keys 		: "_photon",
+				value 		: null ,
+				src 		: "photon",
+				sid 		: null ,
+				category 	: "SCADA_B",
+				figure		: "_particle", 
+				text 		: 'Photon',
+				properties 			: [
+					
+						{ name : "variable" 	, alias : "Variables" ,  value : null , func : null , control : "" , system : true    },
+						{ name : "active"  		,	alias : "Activo", value : false , 	func : null  , control : "" , system : true   },	
+					    { name : "styles" 		, value : [] ,  func : null , control : "select" , system : false },
+						{ name : "graph" 		, value : { type : "linear" , data : {}  } , func : null , control : "graph" , system : false  },
+						{ name : "personalize" 	, value : { photonID : "" } , func : null , control : "input" , system : false  },
+						{ name : "restrict" 	, alias : "Restricciones" , value :  [ "_tank" , "_flowsensor" , "_manometer"] , control : "input" , system : false },
+						{ name : "description" , alias : "Descripcion" , value : "..." , control : "" , system : true },
+						{ name : "function" , backup : ""  , alias : "Funcion" , value : function(){} , control : "input-code" , system : false }
+				]
+			 },
+		
+			  {
+				name 		: "Cloud",
+				keys 		: "_photon_cloud",
+				value 		: null ,
+				src 		: "cloud-1",
+				sid 		: null ,
+				category 	: "SCADA_B",
+				figure		: "_particle_cloud", 
+				text 		: 'Cloud',
+				properties 			: [
+					
+						{ name : "variable" 	, alias : "Variables" ,  value : null , func : null , control : "" , system : true    },
+						{ name : "active"  		,	alias : "Activo", value : false , 	func : null  , control : "" , system : true   },	
+					    { name : "styles" 		, value : [] ,  func : null , control : "select" , system : false },
+						{ name : "graph" 		, value : { type : "linear" , data : {}  } , func : null , control : "graph" , system : false  },
+						{ name : "personalize" 	, value : { particleId : "" } , func : null , control : "input" , system : false  },
+						{ name : "restrict" 	, alias : "Restricciones" , value :  [ "_tank" , "_flowsensor" , "_manometer"] , control : "input" , system : false },
+						{ name : "description" , alias : "Descripcion" , value : "..." , control : "" , system : true },
+						{ name : "function" , backup : ""  , alias : "Funcion" , value : function(){
+						
+								 var $this = scada;
+								 
+								 
+								 var verify = function(){
+								 
+									$this.canvas.startTransaction();  	
+					
+									$this.canvas.nodes.each(function(node) {
+										
+										if(node.part.data.keys  !== "_photon_cloud") return ;
+										$this.canvas.model.setDataProperty(node.data, "src", 'cloud-2' );		
+									});
+								
+									$this.canvas.commitTransaction("Iniciando modificacion ...");
+								 
+								 };
+								 
+								setTimeout(verify , 5000);
+							
+						
+						} , control : "input-code" , system : false }
+				]
+			 }
 				
 		
 		];
